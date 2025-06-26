@@ -1,0 +1,134 @@
+.footer {
+  background-color: white;
+  color: #333; /* Cinza escuro */
+  padding: 40px 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-top {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.footer-top h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #2e7d32; /* Verde meio escuro */
+}
+
+.social-icons a {
+  font-size: 1.6rem;
+  margin: 0 12px;
+  color: #2e7d32; /* Ícones em verde */
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #81c784; /* Verde claro ao passar o mouse */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.footer-section {
+  flex: 1 1 200px;
+  min-width: 200px;
+}
+
+.footer-section h4 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #2e7d32; /* Verde meio escuro */
+}
+
+.footer-section p {
+  font-size: 0.95rem;
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555; /* Cinza escuro médio */
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 15px 10px;
+  font-size: 0.85rem;
+  color: #333; /* Cinza escuro */
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
+}
+
+.payment-icons {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.payment-icons svg {
+  font-size: 1.6rem;
+  color: #2e7d32; /* ícones verde escuro */
+  transition: transform 0.3s, color 0.3s;
+}
+
+.payment-icons svg:hover {
+  transform: scale(1.2);
+  color: #81c784; /* verde claro no hover */
+}
+
+/* Newsletter */
+.newsletter form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.newsletter input[type="email"] {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  background-color: #fff;
+  color: #333; /* texto do input cinza escuro */
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.newsletter input[type="email"]:focus {
+  border-color: #2e7d32; /* verde escuro */
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.3);
+}
+
+.newsletter button {
+  padding: 10px;
+  background-color: #2e7d32; /* botão verde escuro */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+}
+
+.newsletter button:hover {
+  background-color: #1b4d23; /* verde ainda mais escuro no hover */
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .footer-section {
+    text-align: center;
+  }
+}

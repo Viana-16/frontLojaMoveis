@@ -1,0 +1,36 @@
+/* ----- layout geral ----- */
+.perfil-wrapper       { display: flex; gap: 2rem; max-width: 1100px; margin: 2rem auto; font-family: 'Poppins', sans-serif; }
+.sidebar              { width: 260px; background: #fff; border-radius: 14px; box-shadow: 0 4px 10px rgba(0,0,0,.06); padding: 2rem 1rem; text-align: center; }
+.conteudo             { flex: 1; background: #fff; border-radius: 14px; box-shadow: 0 4px 10px rgba(0,0,0,.06); padding: 2rem; }
+
+/* ----- avatar + nome ----- */
+.avatar               { width: 96px; height: 96px; margin: 0 auto; border-radius: 50%; background: #f3f4f6; display: flex; align-items: center; justify-content: center; }
+.cliente-nome         { margin-top: 1rem; font-weight: 600; }
+
+/* ----- quadradinhos ----- */
+.menu-quadrados       { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+.square               { all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; background: #f3f4f6; border-radius: 10px; padding: 1rem; transition: background .25s; font-size: .8rem; }
+.square:hover         { background: #e2e8f0; }
+.square.ativo         { background: #d1fae5; }
+
+/* ----- cards e grids ----- */
+.card                 { border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem; background: #fafafa; }
+.grid-enderecos,
+.grid-pedidos         { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+.dados-section p      { margin-bottom: .5rem; }
+
+/* botão de logout */
+.btn-logout {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  color: #ef4444;              /* tom de vermelho suave */
+  font-size: .85rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  transition: opacity .25s;
+}
+.btn-logout:hover { opacity: .75; }

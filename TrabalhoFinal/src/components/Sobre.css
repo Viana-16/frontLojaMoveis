@@ -1,0 +1,110 @@
+.pagina-sobre {
+  padding: 60px 20px 40px;
+  background-color: #f3f6f9;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+}
+
+/* Título com animação */
+.titulo-container {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.titulo-animado {
+  font-size: 3rem;
+  color: #003366;
+  position: relative;
+  animation: fadeSlide 1s ease-out forwards;
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Animação de título */
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cards */
+.cards-sobre {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card-sobre {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.card-sobre h2 {
+  margin-bottom: 12px;
+  color: #003366;
+  font-size: 1.4rem;
+}
+
+.card-sobre p,
+.card-sobre ul {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+.card-sobre ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+/* Animações */
+.animar {
+  animation: aparecer 0.6s ease-out forwards;
+}
+
+.animar:nth-child(1) { animation-delay: 0.1s; }
+.animar:nth-child(2) { animation-delay: 0.2s; }
+.animar:nth-child(3) { animation-delay: 0.3s; }
+.animar:nth-child(4) { animation-delay: 0.4s; }
+.animar:nth-child(5) { animation-delay: 0.5s; }
+.animar:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes aparecer {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Botões */
+.botoes-sobre {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.botoes-sobre button {
+  background-color: #003366;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.botoes-sobre button:hover {
+  background-color: #00509e;
+}
+

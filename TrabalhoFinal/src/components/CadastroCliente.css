@@ -1,0 +1,64 @@
+.cadastro-container {
+  max-width: 500px;
+  margin: 60px auto 30px;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  font-family: 'Poppins', sans-serif;
+}
+
+.cadastro-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+  color: #333;
+}
+
+.cadastro-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.cadastro-container label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #444;
+  font-size: 15px;
+}
+
+.cadastro-container input {
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+}
+
+.cadastro-container input:focus {
+  border-color: #0077cc;
+  outline: none;
+}
+
+.cadastro-container button[type="submit"] {
+  padding: 14px;
+  background-color: #0077cc;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cadastro-container button[type="submit"]:hover {
+  background-color: #005fa3;
+}
+
+.cadastro-container p {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+}
