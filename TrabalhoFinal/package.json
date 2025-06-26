@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "js-cookie": "^3.0.5",
+    "lucide-react": "^0.523.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.3",
