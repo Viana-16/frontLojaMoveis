@@ -34,3 +34,33 @@
   transition: opacity .25s;
 }
 .btn-logout:hover { opacity: .75; }
+
+
+.form-endereco {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+.form-endereco input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.btn-adicionar {
+  margin-top: 12px;
+  background: #0070f3;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border-radius: 4px;
+}
