@@ -4,49 +4,54 @@
 // export const UserContext = createContext();
 
 // export const UserProvider = ({ children }) => {
-//   const [user, setUser] = useState(null);
+//   const [user, setUser] = useState(() => {
+//     const storedUser = localStorage.getItem('cliente');
+//     return storedUser ? JSON.parse(storedUser) : null;
+//   });
 
-//   // Carregar usuário salvo no cookie (login persistente)
 //   useEffect(() => {
-//     const token = Cookies.get('jwt');
-//     if (token) {
-//       fetchUserProfile(token);
+//     const savedUser = localStorage.getItem('cliente');
+//     if (savedUser) {
+//       setUser(JSON.parse(savedUser));
 //     }
 //   }, []);
 
-//   const fetchUserProfile = async (token) => {
-//   try {
-//     const res = await fetch('https://localhost:7252/api/Login/perfil', {
-//       method: 'GET',
-//       headers: {
-//         'Authorization': `Bearer ${token}`,
-//       }
-//     });
+//   const fetchUserProfile = async () => {
+//     try {
+//       const res = await fetch('https://localhost:7252/api/Login/perfil', {
+//         method: 'GET',
+//         credentials: 'include',
+//       });
 
-//     if (res.ok) {
-//       const data = await res.json();
-//       setUser(data);
-//     } else {
+//       if (res.ok) {
+//         const data = await res.json();
+//         setUser(data);
+//         localStorage.setItem('cliente', JSON.stringify(data));
+//       } else {
+//         setUser(null);
+//         localStorage.removeItem('cliente');
+//       }
+//     } catch (error) {
+//       console.error('Erro ao buscar perfil:', error);
 //       setUser(null);
+//       localStorage.removeItem('cliente');
 //     }
-//   } catch (error) {
-//     console.error('Erro ao buscar perfil:', error);
-//     setUser(null);
-//   }
-// };
+//   };
 
 //   const login = (userData) => {
-//     Cookies.set('jwt', userData.token, { expires: 7 }); // 7 dias de validade
+//     Cookies.set('jwtToken', userData.token, { expires: 7 });
 //     setUser(userData);
+//     localStorage.setItem('cliente', JSON.stringify(userData));
 //   };
 
 //   const logout = () => {
-//     Cookies.remove('jwt');
+//     Cookies.remove('jwtToken');
 //     setUser(null);
+//     localStorage.removeItem('cliente');
 //   };
 
 //   return (
-//     <UserContext.Provider value={{ user, login, logout }}>
+//     <UserContext.Provider value={{ user, login, logout, fetchUserProfile }}>
 //       {children}
 //     </UserContext.Provider>
 //   );
@@ -58,41 +63,38 @@
 //   return context;
 // };
 
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  // Inicializa usuário do localStorage para persistência
+  // Recupera o usuário do localStorage na primeira renderização
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('cliente');
+    const storedUser = localStorage.getItem('cliente'); // Corrigido!
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
+  // Reforça persistência ao montar o componente
   useEffect(() => {
-    const token = Cookies.get('jwtToken');
-
-    if (token) {
-      fetchUserProfile();
-    } else {
-      setUser(null);
-      localStorage.removeItem('cliente');
+    const savedUser = localStorage.getItem('cliente'); // Corrigido!
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
     }
   }, []);
 
-  // Busca perfil para validar token e obter dados do usuário
   const fetchUserProfile = async () => {
     try {
       const res = await fetch('https://localhost:7252/api/Login/perfil', {
         method: 'GET',
-        credentials: 'include', // essencial para enviar cookie HttpOnly
+        credentials: 'include',
       });
 
       if (res.ok) {
         const data = await res.json();
         setUser(data);
-        localStorage.setItem('cliente', JSON.stringify(data));
+        localStorage.setItem('cliente', JSON.stringify(data)); // Persistência
       } else {
         setUser(null);
         localStorage.removeItem('cliente');
@@ -105,8 +107,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const login = (userData) => {
-    // O token também está no cookie HttpOnly (setado pelo backend),
-    // mas para uso imediato armazenamos no localStorage e no estado
     Cookies.set('jwtToken', userData.token, { expires: 7 });
     setUser(userData);
     localStorage.setItem('cliente', JSON.stringify(userData));
@@ -130,13 +130,3 @@ export const useUser = () => {
   if (!context) throw new Error('useUser deve ser usado dentro de um UserProvider');
   return context;
 };
-
-const handleLogout = () => {
-  logout();                    // limpa cookie, localStorage e contexto
-  navigate('/login');          // redireciona para página de login
-  window.location.reload();    // força reset da aplicação (garante que contexto seja limpo)
-};
-
-
-
-
