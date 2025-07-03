@@ -48,8 +48,8 @@
 // export default App;
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import Navbar from './components/Footer-e-NavBar/Navbar';
+import Footer from './components/Footer-e-NavBar/Footer';
 import Home from './components/Home';
 import Carrinho from './components/Carrinho';
 import RastrearPedido from './components/RastrearPedido';
@@ -77,7 +77,7 @@ import Promocoes from './components/PaginasCategoria/Promocoes';
 import Buscar from './components/Barra-Pesquisa/Buscar';
 import RedefinirSenha from './components/RedefinirSenha';
 import EsqueciSenha from './components/EsqueciSenha';
-import MeuPerfil from './components/MeuPerfi';
+import MeuPerfil from './components/MeuPerfil/MeuPerfi';
 
 
 
