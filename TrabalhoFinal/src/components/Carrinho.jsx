@@ -26,7 +26,7 @@ const Carrinho = () => {
           <div className="carrinho-itens">
             {cart.map((item) => (
               <div className="carrinho-item" key={item.id}>
-                <img src={`https://localhost:7252/${item.imagemUrl}`} alt={item.nome} />
+                <img src={item.imagemUrl.startsWith('http') ? item.imagemUrl : `https://localhost:7252/${item.imagemUrl}`} alt={item.nome} />
                 <div className="info">
                   <h3>{item.nome}</h3>
                   <p>Preço unitário: R$ {item.preco.toFixed(2)}</p>
@@ -51,3 +51,5 @@ const Carrinho = () => {
 };
 
 export default Carrinho;
+
+

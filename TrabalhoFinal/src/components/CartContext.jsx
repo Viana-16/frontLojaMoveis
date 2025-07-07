@@ -1,55 +1,70 @@
-// import React, { createContext, useContext, useEffect, useState } from 'react';
-// import { useUser } from './UserContext';
+// import React, { createContext, useContext, useEffect, useState } from "react";
+// import { useUser } from "./UserContext";
 
-// const CartContext = createContext();
+// export const CartContext = createContext();
 
-// export function CartProvider({ children }) {
+// export const CartProvider = ({ children }) => {
 //   const { user } = useUser();
-//   const [carrinho, setCarrinho] = useState([]);
+//   const [cart, setCart] = useState([]);
 
 //   useEffect(() => {
 //     if (user) {
-//       const salvo = localStorage.getItem(`carrinho-${user.email}`);
-//       setCarrinho(salvo ? JSON.parse(salvo) : []);
+//       const carrinhoSalvo = localStorage.getItem(`carrinho_${user.email}`);
+//       setCart(carrinhoSalvo ? JSON.parse(carrinhoSalvo) : []);
 //     }
 //   }, [user]);
 
 //   useEffect(() => {
 //     if (user) {
-//       localStorage.setItem(`carrinho-${user.email}`, JSON.stringify(carrinho));
+//       localStorage.setItem(`carrinho_${user.email}`, JSON.stringify(cart));
 //     }
-//   }, [carrinho, user]);
+//   }, [cart, user]);
 
-//   const adicionarAoCarrinho = (produto) => {
-//     setCarrinho((prevCarrinho) => {
-//       const index = prevCarrinho.findIndex(p => p.id === produto.id);
+//   const addToCart = (produto) => {
+//     const existente = cart.find((item) => item.id === produto.id);
+//     if (existente) {
+//       setCart(
+//         cart.map((item) =>
+//           item.id === produto.id
+//             ? { ...item, quantidade: item.quantidade + 1 }
+//             : item
+//         )
+//       );
+//     } else {
+//       setCart([...cart, { ...produto, quantidade: 1 }]);
+//     }
+//   };
 
-//       if (index !== -1) {
-//         // Produto já está no carrinho, aumenta a quantidade
-//         const novoCarrinho = [...prevCarrinho];
-//         novoCarrinho[index].quantidade += 1;
-//         return novoCarrinho;
-//       } else {
-//         // Novo produto com quantidade 1
-//         return [...prevCarrinho, { ...produto, quantidade: 1 }];
-//       }
-//     });
+//   const increaseQuantity = (id) => {
+//     setCart(
+//       cart.map((item) =>
+//         item.id === id ? { ...item, quantidade: item.quantidade + 1 } : item
+//       )
+//     );
+//   };
+
+//   const removeFromCart = (id) => {
+//     setCart(cart.filter((item) => item.id !== id));
+//   };
+
+//   const clearCart = () => {
+//     setCart([]);
+//     if (user) {
+//       localStorage.removeItem(`carrinho_${user.email}`);
+//     }
 //   };
 
 //   return (
-//     <CartContext.Provider value={{ carrinho, adicionarAoCarrinho }}>
+//     <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, increaseQuantity }}>
 //       {children}
 //     </CartContext.Provider>
 //   );
-// }
+// };
 
-// export function useCart() {
-//   return useContext(CartContext);
-// }
+// export const useCart = () => useContext(CartContext);
 
 
-
-
+// CartContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useUser } from "./UserContext";
 
@@ -59,35 +74,56 @@ export const CartProvider = ({ children }) => {
   const { user } = useUser();
   const [cart, setCart] = useState([]);
 
-  // Carregar carrinho do localStorage quando usuário estiver disponível
+  // 🔒 Aguarda o "user" estar pronto antes de carregar
   useEffect(() => {
-    if (user) {
-      const carrinhoSalvo = localStorage.getItem(`carrinho_${user.email}`);
-      if (carrinhoSalvo) {
+  if (user?.email) {
+    const carrinhoSalvo = localStorage.getItem(`carrinho_${user.email}`);
+    if (carrinhoSalvo) {
+      try {
         setCart(JSON.parse(carrinhoSalvo));
-      } else {
+      } catch {
         setCart([]);
       }
+    } else {
+      setCart([]);
     }
-  }, [user]);
+  }
+}, [user]);
 
-  // Salvar carrinho no localStorage sempre que mudar
+  // 🧠 Salva no localStorage apenas se tiver user
   useEffect(() => {
-    if (user) {
-      localStorage.setItem(`carrinho_${user.email}`, JSON.stringify(cart));
+  if (user?.email) {
+    const carrinhoSalvo = localStorage.getItem(`carrinho_${user.email}`);
+    if (carrinhoSalvo) {
+      setCart(JSON.parse(carrinhoSalvo));
+    } else {
+      setCart([]); // garante que pelo menos zere
     }
-  }, [cart, user]);
+  }
+}, [user]);
+
 
   const addToCart = (produto) => {
-    const jaExiste = cart.find((p) => p.id === produto.id);
-    if (jaExiste) {
-      const atualizado = cart.map((item) =>
-        item.id === produto.id ? { ...item, quantidade: item.quantidade + 1 } : item
+    const existente = cart.find((item) => item.id === produto.id);
+    if (existente) {
+      setCart(
+        cart.map((item) =>
+          item.id === produto.id
+            ? { ...item, quantidade: item.quantidade + 1 }
+            : item
+        )
       );
-      setCart(atualizado);
     } else {
       setCart([...cart, { ...produto, quantidade: 1 }]);
     }
+  };
+
+  const increaseQuantity = (id) => {
+    setCart(
+      cart.map((item) =>
+        item.id === id ? { ...item, quantidade: item.quantidade + 1 } : item
+      )
+    );
   };
 
   const removeFromCart = (id) => {
@@ -96,13 +132,13 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCart([]);
-    if (user) {
+    if (user && user.email) {
       localStorage.removeItem(`carrinho_${user.email}`);
     }
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, increaseQuantity }}>
       {children}
     </CartContext.Provider>
   );

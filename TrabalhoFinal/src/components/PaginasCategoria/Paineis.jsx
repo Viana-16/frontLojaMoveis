@@ -69,7 +69,7 @@ const Paineis = () => {
   const handleAdicionarCarrinho = (produto) => {
     if (!user) {
       alert("Você precisa estar logado para adicionar ao carrinho.");
-      navigate("/login");
+      navigate("/conta");
       return;
     }
 
