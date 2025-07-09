@@ -71,10 +71,19 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   // Recupera o usuário do localStorage na primeira renderização
+  // const [user, setUser] = useState(() => {
+  //   const storedUser = localStorage.getItem('cliente'); // Corrigido!
+  //   return storedUser ? JSON.parse(storedUser) : null;
+  // });
+
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('cliente'); // Corrigido!
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  try {
+    const salvo = localStorage.getItem("cliente");
+    return salvo ? JSON.parse(salvo) : null;
+  } catch {
+    return null;
+  }
+});
 
   // Reforça persistência ao montar o componente
   useEffect(() => {
