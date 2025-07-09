@@ -85,6 +85,7 @@ export const UserProvider = ({ children }) => {
   }
 });
 
+
   // Reforça persistência ao montar o componente
   useEffect(() => {
     const savedUser = localStorage.getItem('cliente'); // Corrigido!
