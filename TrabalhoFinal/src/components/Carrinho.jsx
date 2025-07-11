@@ -139,7 +139,7 @@ const Carrinho = () => {
   if (!cart.length) return;
 
   const pedido = {
-  usuarioId: user?.id,
+  usuarioId: user?._id || user?.id,
   produtos: cart.map(item => ({
     produtoId: item.id,
     nome: item.nome,
@@ -150,6 +150,8 @@ const Carrinho = () => {
   dataPedido: new Date().toISOString(),
   status: "Pendente",
 };
+
+
 
   try {
     const res = await fetch("https://localhost:7252/api/Pedido", {
