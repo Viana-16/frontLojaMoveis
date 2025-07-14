@@ -135,45 +135,43 @@ const Carrinho = () => {
 
   const navigate = useNavigate();
 
-  const finalizarCompra = async () => {
-  if (!cart.length) return;
+ const finalizarCompra = async () => {
+  if (!cart.length || !user?.email) return;
 
   const pedido = {
-  usuarioId: user?._id || user?.id,
-  produtos: cart.map(item => ({
-    produtoId: item.id,
-    nome: item.nome,
-    preco: item.preco,
-    quantidade: item.quantidade,
-  })),
-  total: cartTotal(),
-  dataPedido: new Date().toISOString(),
-  status: "Pendente",
-};
-
-
+    email: user.email, // ✅ apenas email
+    produtos: cart.map(item => ({
+      produtoId: item.id,
+      nome: item.nome,
+      preco: item.preco,
+      quantidade: item.quantidade
+    })),
+    total: cartTotal(),
+    dataPedido: new Date().toISOString(),
+    status: "Pendente"
+  };
 
   try {
     const res = await fetch("https://localhost:7252/api/Pedido", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(pedido)
     });
 
     if (res.ok) {
       alert("✅ Pedido finalizado com sucesso!");
       clearCart();
-      navigate("/"); // ou redirecionar para "/pedidos"
+      navigate("/");
     } else {
       const erro = await res.text();
       alert("❌ Erro ao finalizar pedido: " + erro);
     }
   } catch (err) {
-    alert("❌ Erro de conexão com servidor.");
+    alert("❌ Erro de conexão com o servidor.");
   }
 };
+
+
 
   return (
     <div className="carrinho-container">

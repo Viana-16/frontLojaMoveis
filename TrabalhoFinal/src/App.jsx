@@ -78,6 +78,8 @@ import Buscar from './components/Barra-Pesquisa/Buscar';
 import RedefinirSenha from './components/RedefinirSenha';
 import EsqueciSenha from './components/EsqueciSenha';
 import MeuPerfil from './components/MeuPerfil/MeuPerfi';
+import Pagamento from './components/Pagamentos/Pagamento';
+import ProdutoDetalhes from './components/ProdutoDetalhes';
 
 
 
@@ -92,6 +94,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/carrinho" element={<Carrinho />} />
+        <Route path="/pagamento" element={<Pagamento />} />
         <Route path="/rastrearpedido" element={<RastrearPedido />} />
         <Route path="/atendimento" element={<Atendimento />} />
         <Route path="/conta" element={<Login />} />
@@ -115,6 +118,7 @@ const App = () => {
         <Route path="/camas" element={<Camas />} /> 
         <Route path="/lavanderia" element={<Lavanderia />} /> 
         <Route path="/promocoes" element={<Promocoes />} />
+        <Route path="/produto/:id" element={<ProdutoDetalhes />} />
 
 
         <Route path="/buscar" element={<Buscar />} />

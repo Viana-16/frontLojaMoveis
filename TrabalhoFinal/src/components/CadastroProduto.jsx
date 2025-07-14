@@ -45,7 +45,7 @@
 //     formData.append('preco', produto.preco);
 //     formData.append('descricao', produto.descricao);
 //     formData.append('categoria', produto.categoria);
-//     formData.append('imagem', produto.imagem);
+//     formData.append('imagem', produto.imagem); // nome precisa estar igual ao parâmetro no controller
 
 //     try {
 //       const res = await fetch('https://localhost:7252/api/Produto/upload', {
@@ -55,24 +55,25 @@
 
 //       if (res.ok) {
 //         const data = await res.json();
-//         setMensagem('Produto cadastrado com sucesso!');
+//         setMensagem('✅ Produto cadastrado com sucesso!');
+//         console.log("Produto salvo:", data);
 
-//         // Redirecionar para a página da categoria
-//         const categoria = data.categoria.toLowerCase();
-//         navigate(`/${categoria}`);
+//         // Redirecionar com base na categoria
+//         const categoria = data.categoria?.toLowerCase();
+//         if (categoria) navigate(`/${categoria}`);
 //       } else {
 //         const erro = await res.text();
-//         setMensagem(`Erro: ${erro}`);
+//         setMensagem(`❌ Erro ao cadastrar produto: ${erro}`);
 //       }
 //     } catch (err) {
-//       console.error('Erro ao cadastrar produto:', err);
-//       setMensagem('Erro ao conectar com o servidor.');
+//       console.error('Erro ao conectar com servidor:', err);
+//       setMensagem('❌ Erro ao conectar com o servidor.');
 //     }
 //   };
 
 //   return (
 //     <div style={{ maxWidth: '500px', margin: 'auto' }}>
-//       <h2>Cadastrar Produto</h2>
+//       <h2 style={{ textAlign: 'center' }}>Cadastrar Produto</h2>
 //       <form onSubmit={handleSubmit} encType="multipart/form-data">
 //         <label>Nome:</label>
 //         <input name="nome" type="text" onChange={handleChange} required />
@@ -106,8 +107,11 @@
 //         {imagemPreview && (
 //           <div style={{ marginTop: 10 }}>
 //             <strong>Pré-visualização:</strong>
-//             <br />
-//             <img src={imagemPreview} alt="Preview" style={{ width: '100%', maxHeight: 200, objectFit: 'cover' }} />
+//             <img
+//               src={imagemPreview}
+//               alt="Preview"
+//               style={{ width: '100%', maxHeight: 200, objectFit: 'cover' }}
+//             />
 //           </div>
 //         )}
 
@@ -115,7 +119,9 @@
 //       </form>
 
 //       {mensagem && (
-//         <p style={{ color: mensagem.includes('sucesso') ? 'green' : 'red', marginTop: '10px' }}>{mensagem}</p>
+//         <p style={{ color: mensagem.includes('sucesso') ? 'green' : 'red', marginTop: '10px' }}>
+//           {mensagem}
+//         </p>
 //       )}
 //     </div>
 //   );
@@ -137,8 +143,10 @@ const CadastroProduto = () => {
     imagem: null,
   });
 
-  const [mensagem, setMensagem] = useState('');
+  const [imagensExtras, setImagensExtras] = useState([]);
   const [imagemPreview, setImagemPreview] = useState(null);
+  const [previewsExtras, setPreviewsExtras] = useState([]);
+  const [mensagem, setMensagem] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -159,11 +167,19 @@ const CadastroProduto = () => {
     }
   };
 
+  const handleExtrasChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImagensExtras(files);
+
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setPreviewsExtras(previews);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!produto.imagem) {
-      setMensagem('Imagem obrigatória.');
+      setMensagem('Imagem principal obrigatória.');
       return;
     }
 
@@ -172,7 +188,11 @@ const CadastroProduto = () => {
     formData.append('preco', produto.preco);
     formData.append('descricao', produto.descricao);
     formData.append('categoria', produto.categoria);
-    formData.append('imagem', produto.imagem); // nome precisa estar igual ao parâmetro no controller
+    formData.append('imagem', produto.imagem); // imagem principal
+
+    imagensExtras.forEach((img) => {
+      formData.append('imagensExtras', img);
+    });
 
     try {
       const res = await fetch('https://localhost:7252/api/Produto/upload', {
@@ -185,7 +205,6 @@ const CadastroProduto = () => {
         setMensagem('✅ Produto cadastrado com sucesso!');
         console.log("Produto salvo:", data);
 
-        // Redirecionar com base na categoria
         const categoria = data.categoria?.toLowerCase();
         if (categoria) navigate(`/${categoria}`);
       } else {
@@ -199,7 +218,7 @@ const CadastroProduto = () => {
   };
 
   return (
-    <div style={{ maxWidth: '500px', margin: 'auto' }}>
+    <div style={{ maxWidth: '600px', margin: 'auto' }}>
       <h2 style={{ textAlign: 'center' }}>Cadastrar Produto</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <label>Nome:</label>
@@ -228,12 +247,12 @@ const CadastroProduto = () => {
           <option value="lavanderia">Lavanderia</option>
         </select>
 
-        <label>Imagem:</label>
+        <label>Imagem principal:</label>
         <input name="imagem" type="file" accept="image/*" onChange={handleFileChange} required />
 
         {imagemPreview && (
           <div style={{ marginTop: 10 }}>
-            <strong>Pré-visualização:</strong>
+            <strong>Pré-visualização principal:</strong>
             <img
               src={imagemPreview}
               alt="Preview"
@@ -242,7 +261,23 @@ const CadastroProduto = () => {
           </div>
         )}
 
-        <button type="submit" style={{ marginTop: '15px' }}>Cadastrar</button>
+        <label>Imagens extras (opcional):</label>
+        <input type="file" accept="image/*" multiple onChange={handleExtrasChange} />
+
+        {previewsExtras.length > 0 && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10 }}>
+            {previewsExtras.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`Extra ${i + 1}`}
+                style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 6 }}
+              />
+            ))}
+          </div>
+        )}
+
+        <button type="submit" style={{ marginTop: '20px' }}>Cadastrar Produto</button>
       </form>
 
       {mensagem && (
