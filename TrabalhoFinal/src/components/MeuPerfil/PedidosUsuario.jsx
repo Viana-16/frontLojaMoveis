@@ -1,58 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { useUser } from "../UserContext";'' // Certifique-se de usar corretamente o contexto
-import './PedidosUsuario.css'; // Se desejar estilizar
+import React, { useEffect, useState, useContext } from "react";
+import { UserContext } from "../UserContext";
 
-const PedidosUsuario = () => {
-  const { user } = useUser();
+const PedidosUsuarios = () => {
+  const { user } = useContext(UserContext);
   const [pedidos, setPedidos] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState('');
 
   useEffect(() => {
-    const fetchPedidos = async () => {
-      if (!user?.email) return;
-
-      try {
-        const res = await fetch(`https://localhost:7252/api/Pedido/usuario/${user.email}`);
-        if (!res.ok) throw new Error('Erro ao buscar pedidos');
-        const data = await res.json();
-        setPedidos(data);
-      } catch (err) {
-        setErro('❌ Não foi possível carregar seus pedidos.');
-        console.error(err);
-      } finally {
-        setCarregando(false);
-      }
-    };
-
-    fetchPedidos();
+    if (user?.email) {
+      fetch(`https://localhost:7252/api/Pedido/por-email/${user.email}`)
+        .then(res => res.json())
+        .then(data => setPedidos(data))
+        .catch(() => alert("Erro ao buscar pedidos."));
+    }
   }, [user]);
 
-  if (carregando) return <p>🔄 Carregando pedidos...</p>;
-  if (erro) return <p style={{ color: 'red' }}>{erro}</p>;
+  if (!user) {
+    return <p>Você precisa estar logado para ver seus pedidos.</p>;
+  }
 
-  return pedidos.length ? (
-    <div className="grid-pedidos">
-      {pedidos.map((pedido) => (
-        <article key={pedido.id} className="card-pedido">
-          <p><strong>ID do Pedido:</strong> {pedido.id}</p>
-          <p><strong>Data:</strong> {new Date(pedido.data).toLocaleDateString()}</p>
-          <p><strong>Total:</strong> R$ {pedido.total.toFixed(2)}</p>
-          <p><strong>Produtos:</strong></p>
-          <ul>
-            {pedido.itens.map((item, i) => (
-              <li key={i}>
-                {item.nome} — {item.quantidade} x R$ {item.preco.toFixed(2)} = R$ {(item.preco * item.quantidade).toFixed(2)}
-              </li>
+  if (!pedidos.length) {
+    return <p>Nenhum pedido encontrado.</p>;
+  }
+
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Meus Pedidos</h1>
+      {pedidos.map((pedido, idx) => (
+        <div key={idx} className="border p-4 rounded-lg mb-4 shadow">
+          <p className="text-sm text-gray-500">Data: {new Date(pedido.dataPedido).toLocaleDateString()}</p>
+          <p className="font-semibold text-blue-600">Status: {pedido.status}</p>
+          <div className="mt-2 space-y-1">
+            {pedido.produtos.map((produto, i) => (
+              <div key={i} className="flex justify-between">
+                <span>{produto.nome} (x{produto.quantidade})</span>
+                <span>R$ {produto.preco.toFixed(2)}</span>
+              </div>
             ))}
-          </ul>
-        </article>
+          </div>
+          <p className="font-bold mt-2">Total: R$ {pedido.total.toFixed(2)}</p>
+        </div>
       ))}
     </div>
-  ) : (
-    <p>Você ainda não fez nenhum pedido.</p>
   );
 };
 
-export default PedidosUsuario;
-
+export default PedidosUsuarios;

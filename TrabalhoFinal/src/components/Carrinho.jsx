@@ -135,11 +135,11 @@ const Carrinho = () => {
 
   const navigate = useNavigate();
 
- const finalizarCompra = async () => {
+ const finalizarCompra = () => {
   if (!cart.length || !user?.email) return;
 
   const pedido = {
-    email: user.email, // ✅ apenas email
+    email: user.email,
     produtos: cart.map(item => ({
       produtoId: item.id,
       nome: item.nome,
@@ -151,24 +151,7 @@ const Carrinho = () => {
     status: "Pendente"
   };
 
-  try {
-    const res = await fetch("https://localhost:7252/api/Pedido", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(pedido)
-    });
-
-    if (res.ok) {
-      alert("✅ Pedido finalizado com sucesso!");
-      clearCart();
-      navigate("/");
-    } else {
-      const erro = await res.text();
-      alert("❌ Erro ao finalizar pedido: " + erro);
-    }
-  } catch (err) {
-    alert("❌ Erro de conexão com o servidor.");
-  }
+  navigate("/pagamento", { state: { pedido } });
 };
 
 
