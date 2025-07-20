@@ -134,7 +134,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, ChevronDown, Menu } from 'lucide-react';
 import { useUser } from '../UserContext';
 import { useCart } from '../CartContext';
@@ -145,7 +145,8 @@ const Navbar = () => {
   const { user: cliente, logout } = useUser();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-   const [dropdownTimeout, setDropdownTimeout] = useState(null);
+  const [dropdownTimeout, setDropdownTimeout] = useState(null);
+  const navigate = useNavigate();
 
   // Mensagens promocionais
   const mensagens = [
@@ -167,10 +168,10 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
     setShowUserDropdown(false);
+    navigate('/conta'); // Redireciona para a página de login
   };
 
   const handleMouseEnterDropdown = () => {
-    // Cancela qualquer timeout pendente
     if (dropdownTimeout) {
       clearTimeout(dropdownTimeout);
       setDropdownTimeout(null);
@@ -179,10 +180,9 @@ const Navbar = () => {
   };
 
   const handleMouseLeaveDropdown = () => {
-    // Configura um timeout para fechar o dropdown
     const timeout = setTimeout(() => {
       setShowUserDropdown(false);
-    }, 300); // 300ms de delay
+    }, 300);
     setDropdownTimeout(timeout);
   };
 
@@ -207,20 +207,26 @@ const Navbar = () => {
 
           {/* Menu desktop */}
           <div className="nav-links desktop-only">
-            <NavLink to="/sobre">Sobre Nós</NavLink>
+             <NavLink to="/lancamentos">Lançamentos</NavLink>
             <div className="dropdown">
               <button className="dropbtn">
-                Produtos <ChevronDown size={16} />
+                Categorias <ChevronDown size={16} />
               </button>
               <div className="dropdown-content">
                 <NavLink to="/moveis">Móveis</NavLink>
                 <NavLink to="/decoracao">Decoração</NavLink>
                 <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
               </div>
             </div>
             <NavLink to="/colecoes">Coleções</NavLink>
             <NavLink to="/promocoes">Promoções</NavLink>
-            <NavLink to="/contato">Contato</NavLink>
+            <NavLink to="/atendimento">Contato</NavLink>
           </div>
 
           {/* Ícones de ação */}
@@ -234,73 +240,58 @@ const Navbar = () => {
               {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}
             </NavLink>
             
-            <div 
-        className="user-container"
-        onMouseEnter={handleMouseEnterDropdown}
-        onMouseLeave={handleMouseLeaveDropdown}
-      >
-        <button 
-          className="user-icon-btn"
-          onClick={() => setShowUserDropdown(!showUserDropdown)}
-        >
-          <User size={20} />
-        </button>
-        
-        {showUserDropdown && (
-          <div 
-            className="user-dropdown"
-            onMouseEnter={handleMouseEnterDropdown}
-            onMouseLeave={handleMouseLeaveDropdown}
-          >
-                  {cliente ? (
-                    <>
-                      <div className="user-info">
-                        <p className="user-greeting">Olá, {cliente.nome || cliente.email}</p>
-                        {cliente.email && <p className="user-email">{cliente.email}</p>}
-                      </div>
-                      <div className="dropdown-divider"></div>
-                      <NavLink 
-                        to="/meuperfil" 
-                        className="dropdown-item"
-                        onClick={() => setShowUserDropdown(false)}
-                      >
-                        Minha Conta
-                      </NavLink>
-                      <NavLink 
-                        to="/meuspedidos" 
-                        className="dropdown-item"
-                        onClick={() => setShowUserDropdown(false)}
-                      >
-                        Meus Pedidos
-                      </NavLink>
-                      <button 
-                        className="dropdown-item logout-btn"
-                        onClick={handleLogout}
-                      >
-                        Sair
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <NavLink 
-                        to="/login" 
-                        className="dropdown-item"
-                        onClick={() => setShowUserDropdown(false)}
-                      >
-                        Entrar
-                      </NavLink>
-                      <NavLink 
-                        to="/cadastro" 
-                        className="dropdown-item"
-                        onClick={() => setShowUserDropdown(false)}
-                      >
-                        Cadastrar
-                      </NavLink>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
+            {cliente ? (
+              <div 
+                className="user-container"
+                onMouseEnter={handleMouseEnterDropdown}
+                onMouseLeave={handleMouseLeaveDropdown}
+              >
+                <button 
+                  className="user-icon-btn"
+                  onClick={() => setShowUserDropdown(!showUserDropdown)}
+                >
+                  <User size={20} />
+                </button>
+                
+                {showUserDropdown && (
+                  <div 
+                    className="user-dropdown"
+                    onMouseEnter={handleMouseEnterDropdown}
+                    onMouseLeave={handleMouseLeaveDropdown}
+                  >
+                    <div className="user-info">
+                      <p className="user-greeting">Olá, {cliente.nome || cliente.email}</p>
+                      {cliente.email && <p className="user-email">{cliente.email}</p>}
+                    </div>
+                    <div className="dropdown-divider"></div>
+                    <NavLink 
+                      to="/meuperfil" 
+                      className="dropdown-item"
+                      onClick={() => setShowUserDropdown(false)}
+                    >
+                      Minha Conta
+                    </NavLink>
+                    <NavLink 
+                      to="/meuspedidos" 
+                      className="dropdown-item"
+                      onClick={() => setShowUserDropdown(false)}
+                    >
+                      Meus Pedidos
+                    </NavLink>
+                    <button 
+                      className="dropdown-item logout-btn"
+                      onClick={handleLogout}
+                    >
+                      Sair
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <NavLink to="/conta" className="login-text-btn">
+                Entrar
+              </NavLink>
+            )}
             
             <button 
               className="mobile-menu-btn" 
@@ -316,9 +307,22 @@ const Navbar = () => {
           <div className="mobile-menu">
             <div className="mobile-links">
               <NavLink to="/sobre" onClick={() => setShowMobileMenu(false)}>Sobre Nós</NavLink>
-              <NavLink to="/moveis" onClick={() => setShowMobileMenu(false)}>Móveis</NavLink>
-              <NavLink to="/decoracao" onClick={() => setShowMobileMenu(false)}>Decoração</NavLink>
-              <NavLink to="/iluminacao" onClick={() => setShowMobileMenu(false)}>Iluminação</NavLink>
+              <div className="dropdown">
+              <button className="dropbtn">
+                Categorias <ChevronDown size={16} />
+              </button>
+              <div className="dropdown-content">
+                <NavLink to="/moveis">Móveis</NavLink>
+                <NavLink to="/decoracao">Decoração</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+                <NavLink to="/iluminacao">Iluminação</NavLink>
+              </div>
+            </div>
               <NavLink to="/colecoes" onClick={() => setShowMobileMenu(false)}>Coleções</NavLink>
               <NavLink to="/promocoes" onClick={() => setShowMobileMenu(false)}>Promoções</NavLink>
               <NavLink to="/contato" onClick={() => setShowMobileMenu(false)}>Contato</NavLink>
@@ -327,18 +331,9 @@ const Navbar = () => {
               <div className="mobile-user-section">
                 {cliente ? (
                   <>
-                    <div className="mobile-user-info">
-                      <p className="mobile-user-greeting">Olá, {cliente.nome || cliente.email}</p>
-                      {cliente.email && <p className="mobile-user-email">{cliente.email}</p>}
-                    </div>
-                    <NavLink to="/minhaconta" onClick={() => setShowMobileMenu(false)}>Minha Conta</NavLink>
-                    <NavLink to="/meuspedidos" onClick={() => setShowMobileMenu(false)}>Meus Pedidos</NavLink>
-                    <button className="mobile-logout-btn" onClick={handleLogout}>Sair</button>
                   </>
                 ) : (
                   <>
-                    <NavLink to="/login" onClick={() => setShowMobileMenu(false)}>Entrar</NavLink>
-                    <NavLink to="/cadastro" onClick={() => setShowMobileMenu(false)}>Cadastrar</NavLink>
                   </>
                 )}
               </div>

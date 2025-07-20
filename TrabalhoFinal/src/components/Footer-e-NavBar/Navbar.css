@@ -324,7 +324,6 @@
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-  transition-delay: 0.1s; /* Adiciona um pequeno delay */
 }
 
 .user-container::after {
@@ -413,4 +412,29 @@
   text-align: left;
   font-size: 1rem;
   cursor: pointer;
+}
+
+/* Botão de Entrar quando não logado */
+.login-text-btn {
+  color: var(--verde-principal);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+  border: 1px solid var(--verde-principal);
+}
+
+.login-text-btn:hover {
+  background-color: rgba(5, 66, 33, 0.1);
+  color: var(--verde-principal);
+}
+
+/* Ajuste para o container de ações */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
