@@ -4,13 +4,25 @@
 // export const UserContext = createContext();
 
 // export const UserProvider = ({ children }) => {
-//   const [user, setUser] = useState(() => {
-//     const storedUser = localStorage.getItem('cliente');
-//     return storedUser ? JSON.parse(storedUser) : null;
-//   });
+//   // Recupera o usuário do localStorage na primeira renderização
+//   // const [user, setUser] = useState(() => {
+//   //   const storedUser = localStorage.getItem('cliente'); // Corrigido!
+//   //   return storedUser ? JSON.parse(storedUser) : null;
+//   // });
 
+//   const [user, setUser] = useState(() => {
+//   try {
+//     const salvo = localStorage.getItem("cliente");
+//     return salvo ? JSON.parse(salvo) : null;
+//   } catch {
+//     return null;
+//   }
+// });
+
+
+//   // Reforça persistência ao montar o componente
 //   useEffect(() => {
-//     const savedUser = localStorage.getItem('cliente');
+//     const savedUser = localStorage.getItem('cliente'); // Corrigido!
 //     if (savedUser) {
 //       setUser(JSON.parse(savedUser));
 //     }
@@ -26,7 +38,7 @@
 //       if (res.ok) {
 //         const data = await res.json();
 //         setUser(data);
-//         localStorage.setItem('cliente', JSON.stringify(data));
+//         localStorage.setItem('cliente', JSON.stringify(data)); // Persistência
 //       } else {
 //         setUser(null);
 //         localStorage.removeItem('cliente');
@@ -51,7 +63,7 @@
 //   };
 
 //   return (
-//     <UserContext.Provider value={{ user, login, logout, fetchUserProfile }}>
+//     <UserContext.Provider value={{ user, login, logout }}>
 //       {children}
 //     </UserContext.Provider>
 //   );
@@ -70,25 +82,18 @@ import Cookies from 'js-cookie';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  // Recupera o usuário do localStorage na primeira renderização
-  // const [user, setUser] = useState(() => {
-  //   const storedUser = localStorage.getItem('cliente'); // Corrigido!
-  //   return storedUser ? JSON.parse(storedUser) : null;
-  // });
-
   const [user, setUser] = useState(() => {
-  try {
-    const salvo = localStorage.getItem("cliente");
-    return salvo ? JSON.parse(salvo) : null;
-  } catch {
-    return null;
-  }
-});
-
+    try {
+      const salvo = localStorage.getItem("cliente");
+      return salvo ? JSON.parse(salvo) : null;
+    } catch {
+      return null;
+    }
+  });
 
   // Reforça persistência ao montar o componente
   useEffect(() => {
-    const savedUser = localStorage.getItem('cliente'); // Corrigido!
+    const savedUser = localStorage.getItem('cliente');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
@@ -104,7 +109,7 @@ export const UserProvider = ({ children }) => {
       if (res.ok) {
         const data = await res.json();
         setUser(data);
-        localStorage.setItem('cliente', JSON.stringify(data)); // Persistência
+        localStorage.setItem('cliente', JSON.stringify(data));
       } else {
         setUser(null);
         localStorage.removeItem('cliente');
@@ -129,7 +134,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, setUser, login, logout, fetchUserProfile }}>
       {children}
     </UserContext.Provider>
   );

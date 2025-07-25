@@ -306,3 +306,73 @@
     height: 150px;
   }
 }
+
+/* Estilos para o título do produto */
+.titulo-produto {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #222;
+  font-weight: 600;
+  line-height: 1.3;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.marca-produto {
+  font-size: 0.8rem;
+  color: #2a5bd7;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.subtitulo-produto {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+}
+
+/* Estilos para as estrelas de avaliação */
+.estrelas {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  margin-right: 0.5rem;
+}
+
+.estrela-cheia {
+  color: #ffc107;
+  font-size: 1rem;
+}
+
+.estrela-meia {
+  color: #ffc107;
+  font-size: 1rem;
+  position: relative;
+}
+
+.estrela-meia:after {
+  content: "★";
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #ffc107;
+}
+
+.estrela-vazia {
+  color: #ddd;
+  font-size: 1rem;
+}
+
+.nota {
+  font-weight: 600;
+  color: #333;
+  margin-right: 0.3rem;
+}
+
+.avaliacoes-count {
+  color: #666;
+  font-size: 0.8rem;
+}

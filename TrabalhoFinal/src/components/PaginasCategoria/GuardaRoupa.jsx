@@ -74,15 +74,16 @@
 //                   }}
 //                 />
 //                 {produto.oferta && <div className="badge-oferta">OFERTA</div>}
-//                 <div className="acoes-rapidas">
-//                   <button className="btn-rapido favorito">♥</button>
-//                   <button className="btn-rapido comparar">⇄</button>
-//                 </div>
 //               </div>
 
 //               <div className="produto-info">
 //                 <h3>{produto.nome}</h3>
-                
+
+//                 {/* ✅ Subtítulo novo */}
+//                 <p className="subtitulo-produto">
+//                   {produto.descricao}
+//                 </p>
+
 //                 <div className="avaliacao">
 //                   <span className="estrelas">★★★★★</span>
 //                   <span className="nota">4.8</span>
@@ -118,7 +119,7 @@
 //         ) : (
 //           <div className="sem-produtos">
 //             <p>Nenhum guarda-roupa disponível no momento.</p>
-//             <button onClick={() => navigate("/produtos")}>Ver outros móveis</button>
+//             <button onClick={() => navigate("/")}>Ver outros móveis</button>
 //           </div>
 //         )}
 //       </div>
@@ -127,7 +128,6 @@
 // };
 
 // export default GuardaRoupa;
-
 
 
 import React, { useEffect, useState } from "react";
@@ -143,6 +143,18 @@ const GuardaRoupa = () => {
   const { user } = useUser();
   const { addToCart } = useCart();
 
+  // Função para gerar avaliações aleatórias realistas
+  const gerarAvaliacao = () => {
+    const notas = [4.2, 4.5, 4.7, 4.8, 4.9, 5.0];
+    const avaliacoesCount = [15, 28, 42, 56, 73, 89, 104, 121];
+    const randomIndex = Math.floor(Math.random() * notas.length);
+    
+    return {
+      nota: notas[randomIndex],
+      count: avaliacoesCount[Math.floor(Math.random() * avaliacoesCount.length)]
+    };
+  };
+
   useEffect(() => {
     setCarregando(true);
     fetch("https://localhost:7252/api/Produto")
@@ -150,7 +162,10 @@ const GuardaRoupa = () => {
       .then((data) => {
         const produtosFiltrados = data.filter(
           (p) => p.categoria.toLowerCase() === "guarda-roupas"
-        );
+        ).map(produto => ({
+          ...produto,
+          avaliacao: gerarAvaliacao() // Adiciona avaliação única para cada produto
+        }));
         setProdutos(produtosFiltrados);
       })
       .catch((err) => console.error("Erro ao buscar produtos:", err))
@@ -169,6 +184,25 @@ const GuardaRoupa = () => {
 
   const formatarPreco = (preco) => {
     return preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  };
+
+  // Função para renderizar estrelas baseadas na nota
+  const renderEstrelas = (nota) => {
+    const estrelasCheias = Math.floor(nota);
+    const temMeiaEstrela = nota % 1 >= 0.5;
+    const estrelasVazias = 5 - estrelasCheias - (temMeiaEstrela ? 1 : 0);
+    
+    return (
+      <>
+        {[...Array(estrelasCheias)].map((_, i) => (
+          <span key={`cheia-${i}`} className="estrela-cheia">★</span>
+        ))}
+        {temMeiaEstrela && <span className="estrela-meia">★</span>}
+        {[...Array(estrelasVazias)].map((_, i) => (
+          <span key={`vazia-${i}`} className="estrela-vazia">★</span>
+        ))}
+      </>
+    );
   };
 
   if (carregando) {
@@ -209,17 +243,20 @@ const GuardaRoupa = () => {
               </div>
 
               <div className="produto-info">
-                <h3>{produto.nome}</h3>
+                <h3 className="titulo-produto">
+                  {produto.nome}
+                </h3>
 
-                {/* ✅ Subtítulo novo */}
                 <p className="subtitulo-produto">
-                  {produto.descricao}
+                  {produto.descricao.substring(0, 60)}...
                 </p>
 
                 <div className="avaliacao">
-                  <span className="estrelas">★★★★★</span>
-                  <span className="nota">4.8</span>
-                  <span className="avaliacoes-count">(121)</span>
+                  <div className="estrelas">
+                    {renderEstrelas(produto.avaliacao.nota)}
+                  </div>
+                  <span className="nota">{produto.avaliacao.nota.toFixed(1)}</span>
+                  <span className="avaliacoes-count">({produto.avaliacao.count})</span>
                 </div>
 
                 <div className="preco-container">
@@ -251,7 +288,7 @@ const GuardaRoupa = () => {
         ) : (
           <div className="sem-produtos">
             <p>Nenhum guarda-roupa disponível no momento.</p>
-            <button onClick={() => navigate("/produtos")}>Ver outros móveis</button>
+            <button onClick={() => navigate("/")}>Ver outros móveis</button>
           </div>
         )}
       </div>
