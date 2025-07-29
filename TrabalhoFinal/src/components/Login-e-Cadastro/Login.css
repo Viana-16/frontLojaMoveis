@@ -1,71 +1,118 @@
-/* .cadastro-container {
-  max-width: 500px;
-  margin: 60px auto 30px;
-  padding: 40px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
 
-.cadastro-container h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 24px;
-  color: #333;
-} 
-
-.cadastro-container form {
+.login-page {
+  min-height: 100vh;
+  width: 100vw;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 20px;  Afasta da navbar 
+  background: linear-gradient(to right, #f0f0f0, #d9d9d9);
 }
 
-.cadastro-container label {
+.login-container {
+  background-color: #ffffff;
+  padding: 60px 50px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;  container maior 
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 10px;
+  font-size: 26px;
+  color: #333;
+}
+
+.subtitulo-login {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 30px;
+  line-height: 1.4;
+}
+
+label {
+  display: block;
+  text-align: left;
   margin-bottom: 6px;
   font-weight: 500;
-  color: #444;
+  color: #555;
   font-size: 15px;
 }
 
-.cadastro-container input {
-  padding: 12px 14px;
-  margin-bottom: 20px;
+input {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 18px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 15px;
-  transition: border-color 0.3s ease;
-}
-
-.cadastro-container input:focus {
-  border-color: #0077cc;
-  outline: none;
-}
-
-.cadastro-container button[type="submit"] {
-  padding: 14px;
-  background-color: #0077cc;
-  color: white;
   font-size: 16px;
-  font-weight: 500;
-  border: none;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 24px;
+}
+
+.forgot-password a {
+  font-size: 13px;
+  color: #0077cc;
+  text-decoration: none;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+button[type="submit"],
+.cadastro-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 17px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: 0.3s ease;
 }
 
-.cadastro-container button[type="submit"]:hover {
+button[type="submit"] {
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  margin-bottom: 14px;
+}
+
+button[type="submit"]:hover {
   background-color: #005fa3;
 }
 
-.cadastro-container p {
-  margin-top: 16px;
+.cadastro-btn {
+  background-color: transparent;
+  color: #0077cc;
+  border: 2px solid #0077cc;
+}
+
+.cadastro-btn:hover {
+  background-color: #0077cc;
+  color: white;
+}
+
+.mensagem-erro {
+  color: red;
+  margin-top: 10px;
   text-align: center;
-  font-size: 14px;
-} */
+}
+ */
 
 
 /* Estilos gerais */
-.cadastro-page {
+.login-page {
   display: flex;
   min-height: 100vh;
   background-color: #f8f9fa;
@@ -75,7 +122,7 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-.cadastro-container {
+.login-container {
   width: 100%;
   max-width: 450px;
   padding: 3rem;
@@ -92,31 +139,31 @@
 .logo-text {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #2e8b57;
+  color: #2e8b57; /* Verde elegante */
   letter-spacing: 0.5px;
 }
 
 /* Cabeçalho */
-.cadastro-header {
+.login-header {
   margin-bottom: 2.5rem;
   text-align: center;
 }
 
-.cadastro-header h2 {
+.login-header h2 {
   font-size: 1.8rem;
   font-weight: 600;
   color: #333;
   margin-bottom: 0.8rem;
 }
 
-.subtitulo-cadastro {
+.subtitulo-login {
   color: #666;
   font-size: 0.95rem;
   line-height: 1.6;
 }
 
 /* Formulário */
-.cadastro-form {
+.login-form {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -150,8 +197,26 @@
   box-shadow: 0 0 0 2px rgba(46, 139, 87, 0.1);
 }
 
+/* Opções de login */
+.login-options {
+  text-align: right;
+  margin-bottom: 0.5rem;
+}
+
+.forgot-password {
+  font-size: 0.9rem;
+  color: #2e8b57;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+  color: #1f6b3d;
+  text-decoration: underline;
+}
+
 /* Botão principal */
-.cadastro-button {
+.login-button {
   padding: 1rem;
   background: #2e8b57;
   color: white;
@@ -165,14 +230,13 @@
   justify-content: center;
   gap: 0.5rem;
   transition: all 0.3s ease;
-  margin-top: 1rem;
 }
 
-.cadastro-button:hover {
+.login-button:hover {
   background: #1f6b3d;
 }
 
-.cadastro-button:disabled {
+.login-button:disabled {
   background: #a5d6b0;
   cursor: not-allowed;
 }
@@ -190,26 +254,19 @@
   to { transform: rotate(360deg); }
 }
 
-/* Mensagens */
-.mensagem {
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-}
-
-.mensagem.erro {
+/* Mensagem de erro */
+.mensagem-erro {
   color: #e74c3c;
-}
-
-.mensagem.info {
-  color: #2e8b57;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: -0.5rem;
 }
 
 /* Divisor */
 .divider {
   display: flex;
   align-items: center;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
   color: #999;
   font-size: 0.9rem;
 }
@@ -229,8 +286,8 @@
   margin-left: 1rem;
 }
 
-/* Botão de login */
-.loginn-button {
+/* Botão de registro */
+.register-button {
   padding: 1rem;
   background: white;
   color: #2e8b57;
@@ -242,18 +299,18 @@
   transition: all 0.3s ease;
 }
 
-.loginn-button:hover {
+.register-button:hover {
   background: #f0f9f4;
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
-  .cadastro-container {
+  .login-container {
     padding: 2rem;
     margin: 1rem;
   }
   
-  .cadastro-header h2 {
+  .login-header h2 {
     font-size: 1.5rem;
   }
 }

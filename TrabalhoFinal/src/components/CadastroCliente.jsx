@@ -1,6 +1,7 @@
 // import React, { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import './CadastroCliente.css';
+
 // const CadastroCliente = () => {
 //   const [cliente, setCliente] = useState({
 //     nome: '',
@@ -12,6 +13,24 @@
 //   const [mensagem, setMensagem] = useState('');
 //   const navigate = useNavigate();
 
+//   // Validação de CPF real
+//   const validarCPF = (cpf) => {
+//     cpf = cpf.replace(/\D/g, '');
+//     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+//     let soma = 0;
+//     for (let i = 0; i < 9; i++) soma += parseInt(cpf.charAt(i)) * (10 - i);
+//     let resto = soma % 11;
+//     let digito1 = resto < 2 ? 0 : 11 - resto;
+
+//     soma = 0;
+//     for (let i = 0; i < 10; i++) soma += parseInt(cpf.charAt(i)) * (11 - i);
+//     resto = soma % 11;
+//     let digito2 = resto < 2 ? 0 : 11 - resto;
+
+//     return cpf.endsWith(`${digito1}${digito2}`);
+//   };
+
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
 
@@ -19,17 +38,17 @@
 
 //     if (name === 'cpf') {
 //       formattedValue = value
-//         .replace(/\D/g, '')               // remove não dígitos
-//         .replace(/(\d{3})(\d)/, '$1.$2')  // 000.000
-//         .replace(/(\d{3})(\d)/, '$1.$2')  // 000.000.000
-//         .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // 000.000.000-00
+//         .replace(/\D/g, '')
+//         .replace(/(\d{3})(\d)/, '$1.$2')
+//         .replace(/(\d{3})(\d)/, '$1.$2')
+//         .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 //     }
 
 //     if (name === 'telefone') {
 //       formattedValue = value
-//         .replace(/\D/g, '')                                // remove não dígitos
-//         .replace(/^(\d{2})(\d)/, '($1) $2')                // (00) 00000
-//         .replace(/(\d{5})(\d{1,4})$/, '$1-$2');            // (00) 00000-0000
+//         .replace(/\D/g, '')
+//         .replace(/^(\d{2})(\d)/, '($1) $2')
+//         .replace(/(\d{5})(\d{1,4})$/, '$1-$2');
 //     }
 
 //     setCliente({ ...cliente, [name]: formattedValue });
@@ -37,6 +56,13 @@
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
+
+//     // ✅ Valida CPF no front
+//     const cpfLimpo = cliente.cpf.replace(/\D/g, '');
+//     if (!validarCPF(cpfLimpo)) {
+//       setMensagem('❌ CPF inválido. Por favor, insira um CPF verdadeiro.');
+//       return;
+//     }
 
 //     try {
 //       const res = await fetch('https://localhost:7252/api/Cliente', {
@@ -50,10 +76,10 @@
 //       if (res.ok) {
 //         navigate('/conta');
 //       } else {
-//         setMensagem(text);
+//         setMensagem(`❌ ${text}`);
 //       }
 //     } catch {
-//       setMensagem('Erro ao conectar com o servidor.');
+//       setMensagem('❌ Erro ao conectar com o servidor.');
 //     }
 //   };
 
@@ -78,7 +104,8 @@
 
 //         <button type="submit">Cadastrar</button>
 //       </form>
-//       {mensagem && <p style={{ color: 'red' }}>{mensagem}</p>}
+
+//       {mensagem && <p style={{ color: mensagem.includes('sucesso') ? 'green' : 'red' }}>{mensagem}</p>}
 //     </div>
 //   );
 // };
@@ -88,6 +115,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { User, Mail, Lock, CreditCard, Phone, ArrowRight } from 'lucide-react';
 import './CadastroCliente.css';
 
 const CadastroCliente = () => {
@@ -99,9 +127,9 @@ const CadastroCliente = () => {
     telefone: ''
   });
   const [mensagem, setMensagem] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Validação de CPF real
   const validarCPF = (cpf) => {
     cpf = cpf.replace(/\D/g, '');
     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
@@ -121,7 +149,6 @@ const CadastroCliente = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     let formattedValue = value;
 
     if (name === 'cpf') {
@@ -144,11 +171,12 @@ const CadastroCliente = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    // ✅ Valida CPF no front
     const cpfLimpo = cliente.cpf.replace(/\D/g, '');
     if (!validarCPF(cpfLimpo)) {
-      setMensagem('❌ CPF inválido. Por favor, insira um CPF verdadeiro.');
+      setMensagem('CPF inválido. Por favor, insira um CPF verdadeiro.');
+      setLoading(false);
       return;
     }
 
@@ -156,7 +184,11 @@ const CadastroCliente = () => {
       const res = await fetch('https://localhost:7252/api/Cliente', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(cliente),
+        body: JSON.stringify({
+          ...cliente,
+          cpf: cpfLimpo,
+          telefone: cliente.telefone.replace(/\D/g, '')
+        }),
       });
 
       const text = await res.text();
@@ -164,36 +196,127 @@ const CadastroCliente = () => {
       if (res.ok) {
         navigate('/conta');
       } else {
-        setMensagem(`❌ ${text}`);
+        setMensagem(text || 'Erro ao cadastrar');
       }
     } catch {
-      setMensagem('❌ Erro ao conectar com o servidor.');
+      setMensagem('Erro ao conectar com o servidor.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="cadastro-container">
-      <h2>Cadastro de Cliente</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Nome:</label>
-        <input name="nome" value={cliente.nome} onChange={handleChange} required />
+    <div className="cadastro-page">
+      <div className="cadastro-container">
+        <div className="cadastro-header">
+          <div className="logo-placeholder">
+            <span className="logo-text">Móveis Classic</span>
+          </div>
+          <h2>Crie sua conta</h2>
+          <p className="subtitulo-cadastro">
+            Preencha seus dados para acessar ofertas exclusivas
+          </p>
+        </div>
 
-        <label>Email:</label>
-        <input name="email" type="email" value={cliente.email} onChange={handleChange} required />
+        <form onSubmit={handleSubmit} className="cadastro-form">
+          <div className="input-group">
+            <div className="input-icon">
+              <User size={18} />
+            </div>
+            <input
+              name="nome"
+              value={cliente.nome}
+              onChange={handleChange}
+              placeholder="Nome completo"
+              required
+            />
+          </div>
 
-        <label>CPF:</label>
-        <input name="cpf" value={cliente.cpf} onChange={handleChange} maxLength={14} required />
+          <div className="input-group">
+            <div className="input-icon">
+              <Mail size={18} />
+            </div>
+            <input
+              name="email"
+              type="email"
+              value={cliente.email}
+              onChange={handleChange}
+              placeholder="Seu melhor e-mail"
+              required
+            />
+          </div>
 
-        <label>Telefone:</label>
-        <input name="telefone" value={cliente.telefone} onChange={handleChange} maxLength={15} required />
-        
-        <label>Senha:</label>
-        <input name="senha" type="password" value={cliente.senha} onChange={handleChange} required />
+          <div className="input-group">
+            <div className="input-icon">
+              <CreditCard size={18} />
+            </div>
+            <input
+              name="cpf"
+              value={cliente.cpf}
+              onChange={handleChange}
+              placeholder="CPF"
+              maxLength={14}
+              required
+            />
+          </div>
 
-        <button type="submit">Cadastrar</button>
-      </form>
+          <div className="input-group">
+            <div className="input-icon">
+              <Phone size={18} />
+            </div>
+            <input
+              name="telefone"
+              value={cliente.telefone}
+              onChange={handleChange}
+              placeholder="Telefone"
+              maxLength={15}
+              required
+            />
+          </div>
 
-      {mensagem && <p style={{ color: mensagem.includes('sucesso') ? 'green' : 'red' }}>{mensagem}</p>}
+          <div className="input-group">
+            <div className="input-icon">
+              <Lock size={18} />
+            </div>
+            <input
+              name="senha"
+              type="password"
+              value={cliente.senha}
+              onChange={handleChange}
+              placeholder="Crie uma senha"
+              required
+            />
+          </div>
+
+          <button type="submit" className="cadastro-button" disabled={loading}>
+            {loading ? (
+              <div className="spinner"></div>
+            ) : (
+              <>
+                Cadastrar <ArrowRight size={18} />
+              </>
+            )}
+          </button>
+
+          {mensagem && (
+            <p className={`mensagem ${mensagem.includes('inválido') ? 'erro' : 'info'}`}>
+              {mensagem}
+            </p>
+          )}
+
+          <div className="divider">
+            <span>Já tem uma conta?</span>
+          </div>
+
+          <button
+            type="button"
+            className="loginn-button"
+            onClick={() => navigate('/conta')}
+          >
+            Fazer login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

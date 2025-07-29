@@ -136,6 +136,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, ChevronDown, Menu } from 'lucide-react';
+import { Truck, CreditCard, Shield, Package } from 'lucide-react';
 import { useUser } from '../UserContext';
 import { useCart } from '../CartContext';
 import './Navbar.css';
@@ -146,16 +147,18 @@ const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [dropdownTimeout, setDropdownTimeout] = useState(null);
+  
   const navigate = useNavigate();
+   const [mensagemAtual, setMensagemAtual] = useState(0);
 
   // Mensagens promocionais
   const mensagens = [
-    '🚚 Frete grátis para todo Brasil',
-    '💳 Parcele em até 10x sem juros',
-    '🔒 Compra 100% segura',
-    '📦 Entrega rápida'
+    { texto: 'Frete grátis para todo Brasil', icone: <Truck size={18} /> },
+    { texto: 'Parcele em até 10x sem juros', icone: <CreditCard size={18} /> },
+    { texto: 'Compra 100% segura', icone: <Shield size={18} /> },
+    { texto: 'Entrega rápida', icone: <Package size={18} /> }
   ];
-  const [mensagemAtual, setMensagemAtual] = useState(0);
+
 
   useEffect(() => {
     const intervalo = setInterval(
@@ -189,11 +192,20 @@ const Navbar = () => {
   return (
     <>
       {/* Faixa promocional superior */}
-      <div className="mensagem-topo">
+      {/* <div className="mensagem-topo">
         <div className="mensagem-container">
           {mensagens[mensagemAtual]}
         </div>
+      </div> */}
+
+      <div className="mensagem-topo">
+      <div className="mensagem-container">
+        <div className="mensagem-item">
+          {mensagens[mensagemAtual].icone}
+          <span>{mensagens[mensagemAtual].texto}</span>
+        </div>
       </div>
+    </div>
 
       {/* Navbar principal */}
       <nav className="navbar-classica">
@@ -325,7 +337,7 @@ const Navbar = () => {
             </div>
               <NavLink to="/colecoes" onClick={() => setShowMobileMenu(false)}>Coleções</NavLink>
               <NavLink to="/promocoes" onClick={() => setShowMobileMenu(false)}>Promoções</NavLink>
-              <NavLink to="/contato" onClick={() => setShowMobileMenu(false)}>Contato</NavLink>
+              <NavLink to="/atendimento" onClick={() => setShowMobileMenu(false)}>Contato</NavLink>
               
               {/* Seção do usuário no mobile */}
               <div className="mobile-user-section">

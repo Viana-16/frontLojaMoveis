@@ -48,6 +48,7 @@
 // export default App;
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './App.css'; // Ajuste o caminho conforme necessário
 import Navbar from './components/Footer-e-NavBar/Navbar';
 import Footer from './components/Footer-e-NavBar/Footer';
 import Home from './components/Home';
@@ -55,7 +56,7 @@ import Carrinho from './components/Carrinho';
 import RastrearPedido from './components/RastrearPedido';
 import Atendimento from './components/Atendimento';
 import Sobre from './components/Sobre';
-import Login from './components/Login';
+import Login from './components/Login-e-Cadastro/Login';
 import CadastroCliente from './components/CadastroCliente';
 // import AdminDash from './components/AdminDash';
 import PainelAdmin from './components/PainelAdmin';

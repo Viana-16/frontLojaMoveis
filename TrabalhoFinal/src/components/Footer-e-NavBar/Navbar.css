@@ -19,18 +19,45 @@
 /* Faixa promocional superior */
 .mensagem-topo {
   background-color: var(--verde-principal);
-  color: var(--texto-claro);
+  color: var(--texto-claro);/*
   text-align: center;
-  padding: 8px 0;
+  padding: 8px 0; 
   font-size: 0.9rem;
   font-weight: 300;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.5px; */
+
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .mensagem-container {
-  max-width: 1200px;
+  /* max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 20px; */
+
+    max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.mensagem-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: white;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mensagem-item svg {
+  color: #d4af37;
 }
 
 /* Navbar principal */
@@ -367,7 +394,7 @@
 }
 
 .dropdown-item:hover {
-  color: #2a5bd7;
+  color: #4CAF50;
 }
 
 .logout-btn {
@@ -438,3 +465,5 @@
   align-items: center;
   gap: 15px;
 }
+
+

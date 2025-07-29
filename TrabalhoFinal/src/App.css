@@ -1,0 +1,24 @@
+
+  
+  /* 1. IMPORTE A FONTE (via Google Fonts) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800;900&display=swap');
+
+/* 2. APLIQUE EM TODOS OS ELEMENTOS - INCLUINDO FORMULÁRIOS */
+* {
+  font-family: 'Montserrat', sans-serif !important;
+  -webkit-font-smoothing: antialiased; /* Melhora a renderização no Mac/iOS */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 3. GARANTA QUE ELEMENTOS ESPECÍFICOS HERDEM CORRETAMENTE */
+body, input, textarea, select, button, a, p, span, div, h1, h2, h3, h4, h5, h6 {
+  font-family: inherit !important;
+}
+
+/* 4. PADRÕES PARA FORMULÁRIOS (override de estilos nativos) */
+input::placeholder,
+textarea::placeholder {
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 300;
+  color: #999;
+}
