@@ -1,123 +1,8 @@
-// import React from "react";
-// import { useCart } from "../components/CartContext";
-// import { useNavigate } from "react-router-dom";
-// import "./Carrinho.css";
-
-// const Carrinho = () => {
-//   const { 
-//     cart, 
-//     removeFromCart, 
-//     clearCart, 
-//     increaseQuantity, 
-//     decreaseQuantity,
-//     cartTotal,
-//     itemCount
-//   } = useCart();
-//   const navigate = useNavigate();
-
-//   const finalizarCompra = () => {
-//     alert(`Compra de ${itemCount()} itens no valor total de R$ ${cartTotal().toFixed(2)} finalizada com sucesso!`);
-//     clearCart();
-//     navigate("/");
-//   };
-
-//   return (
-//     <div className="carrinho-container">
-//       <div className="carrinho-header">
-//         <h2>Meu Carrinho</h2>
-//         {cart.length > 0 && (
-//           <span className="item-count">{itemCount()} {itemCount() === 1 ? 'item' : 'itens'}</span>
-//         )}
-//       </div>
-
-//       {cart.length === 0 ? (
-//         <div className="carrinho-vazio">
-//           <p>Seu carrinho está vazio</p>
-//           <button className="btn-continuar" onClick={() => navigate("/")}>
-//             Continuar Comprando
-//           </button>
-//         </div>
-//       ) : (
-//         <>
-//           <div className="carrinho-itens">
-//             {cart.map((item) => (
-//               <div className="carrinho-item" key={item.id}>
-//                 <div className="item-imagem">
-//                   <img
-//                     src={item.imagemUrl.startsWith("http") ? item.imagemUrl : `https://localhost:7252/${item.imagemUrl}`}
-//                     alt={item.nome}
-//                     onError={(e) => {
-//                       e.target.src = 'https://via.placeholder.com/150?text=Produto+Sem+Imagem';
-//                     }}
-//                   />
-//                 </div>
-//                 <div className="item-info">
-//                   <h3>{item.nome}</h3>
-//                   <p className="preco-unitario">R$ {item.preco.toFixed(2)}</p>
-                  
-//                   <div className="quantidade-controller">
-//                     <button onClick={() => decreaseQuantity(item.id)}>-</button>
-//                     <span>{item.quantidade}</span>
-//                     <button onClick={() => increaseQuantity(item.id)}>+</button>
-//                   </div>
-                  
-//                   <p className="preco-total">R$ {(item.preco * item.quantidade).toFixed(2)}</p>
-                  
-//                   <button 
-//                     className="btn-remover" 
-//                     onClick={() => removeFromCart(item.id)}
-//                     aria-label={`Remover ${item.nome} do carrinho`}
-//                   >
-//                     <i className="fas fa-trash"></i> Remover
-//                   </button>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-
-//           <div className="carrinho-resumo">
-//             <div className="resumo-detalhes">
-//               <h3>Resumo do Pedido</h3>
-//               <div className="resumo-linha">
-//                 <span>Subtotal ({itemCount()} itens):</span>
-//                 <span>R$ {cartTotal().toFixed(2)}</span>
-//               </div>
-//               <div className="resumo-linha">
-//                 <span>Frete:</span>
-//                 <span>Grátis</span>
-//               </div>
-//               <div className="resumo-linha total">
-//                 <span>Total:</span>
-//                 <span>R$ {cartTotal().toFixed(2)}</span>
-//               </div>
-//             </div>
-            
-//             <div className="acoes-carrinho">
-//               <button className="btn-continuar" onClick={() => navigate("/")}>
-//                 Continuar Comprando
-//               </button>
-//               <button className="btn-limpar" onClick={clearCart}>
-//                 Limpar Carrinho
-//               </button>
-//               <button className="btn-finalizar" onClick={finalizarCompra}>
-//                 Finalizar Compra
-//               </button>
-//             </div>
-//           </div>
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Carrinho;
-
-
-
-import React from "react";
+import React, { useState } from "react";
 import { useUser } from '../components/UserContext';
 import { useCart } from "../components/CartContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Adicionei useLocation aqui
+import { Trash2, ShoppingBag, ArrowLeft, X, Check, ChevronDown, ChevronUp } from "lucide-react";
 import "./Carrinho.css";
 
 const Carrinho = () => {
@@ -128,118 +13,203 @@ const Carrinho = () => {
     increaseQuantity, 
     decreaseQuantity,
     cartTotal,
-    itemCount
+    itemCount,
+    removeItemsFromCart // Adicionamos esta função no CartContext
   } = useCart();
 
   const { user } = useUser();
-
   const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedItems, setSelectedItems] = useState([]);
 
- const finalizarCompra = () => {
-  if (!cart.length || !user?.email) return;
+  // Verifica se veio da confirmação de pagamento
+  React.useEffect(() => {
+    if (location.state?.fromPayment) {
+      // Remove apenas os itens que foram para o pagamento
+      if (location.state.purchasedItems) {
+        removeItemsFromCart(location.state.purchasedItems);
+      }
+      // Limpa o state para não remover novamente
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate, removeItemsFromCart]);
 
-  const pedido = {
-    email: user.email,
-    produtos: cart.map(item => ({
-      produtoId: item.id,
-      nome: item.nome,
-      preco: item.preco,
-      quantidade: item.quantidade
-    })),
-    total: cartTotal(),
-    dataPedido: new Date().toISOString(),
-    status: "Pendente"
+  const formatPrice = (value) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
   };
 
-  navigate("/pagamento", { state: { pedido } });
-};
+  // Alterna seleção de item
+  const toggleItemSelection = (itemId) => {
+    setSelectedItems(prev => 
+      prev.includes(itemId) 
+        ? prev.filter(id => id !== itemId) 
+        : [...prev, itemId]
+    );
+  };
+
+  // Calcula total dos itens selecionados
+  const calculateSelectedTotal = () => {
+    return cart.reduce((total, item) => {
+      return selectedItems.includes(item.id) 
+        ? total + (item.preco * item.quantidade) 
+        : total;
+    }, 0);
+  };
+
+  const selectedCount = selectedItems.length;
+
+  const finalizarCompra = () => {
+    if (selectedCount === 0 || !user?.email) return;
+
+    const pedido = {
+      email: user.email,
+      produtos: cart
+        .filter(item => selectedItems.includes(item.id))
+        .map(item => ({
+          produtoId: item.id,
+          nome: item.nome,
+          preco: item.preco,
+          quantidade: item.quantidade
+        })),
+      total: calculateSelectedTotal(),
+      dataPedido: new Date().toISOString(),
+      status: "Pendente"
+    };
 
 
+    navigate("/pagamento", { 
+      state: { 
+        pedido,
+        // Envia os IDs dos itens selecionados para poder remover depois
+        selectedItems 
+      } 
+    });
+  };
 
   return (
     <div className="carrinho-container">
       <div className="carrinho-header">
-        <h2>Meu Carrinho</h2>
-        {cart.length > 0 && (
-          <span className="item-count">{itemCount()} {itemCount() === 1 ? 'item' : 'itens'}</span>
-        )}
+        <button className="btn-voltar" onClick={() => navigate("/")}>
+          <ArrowLeft size={20} /> Continuar comprando
+        </button>
+        <h2>
+          <ShoppingBag size={24} /> Meu Carrinho
+          {cart.length > 0 && (
+            <span className="item-count">({itemCount()} {itemCount() === 1 ? 'item' : 'itens'})</span>
+          )}
+        </h2>
       </div>
 
       {cart.length === 0 ? (
         <div className="carrinho-vazio">
-          <p>Seu carrinho está vazio</p>
-          <button className="btn-continuar" onClick={() => navigate("/")}>
-            Continuar Comprando
+          <div className="icone-vazio">
+            <ShoppingBag size={48} />
+            <X size={48} className="x-icon" />
+          </div>
+          <h3>Seu carrinho está vazio</h3>
+          <p>Adicione produtos para continuar</p>
+          <button className="btn-primario" onClick={() => navigate("/")}>
+            Ver produtos
           </button>
         </div>
       ) : (
-        <>
+        <div className="carrinho-content">
           <div className="carrinho-itens">
             {cart.map((item) => (
               <div className="carrinho-item" key={item.id}>
-                <div className="item-imagem">
-                  <img
-                    src={item.imagemUrl.startsWith("http") ? item.imagemUrl : `https://localhost:7252/${item.imagemUrl}`}
-                    alt={item.nome}
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/150?text=Produto+Sem+Imagem';
-                    }}
-                  />
-                </div>
-                <div className="item-info">
-                  <h3>{item.nome}</h3>
-                  <p className="preco-unitario">R$ {item.preco.toFixed(2)}</p>
-                  
-                  <div className="quantidade-controller">
-                    <button onClick={() => decreaseQuantity(item.id)}>-</button>
-                    <span>{item.quantidade}</span>
-                    <button onClick={() => increaseQuantity(item.id)}>+</button>
-                  </div>
-                  
-                  <p className="preco-total">R$ {(item.preco * item.quantidade).toFixed(2)}</p>
-                  
-                  <button 
-                    className="btn-remover" 
-                    onClick={() => removeFromCart(item.id)}
-                    aria-label={`Remover ${item.nome} do carrinho`}
+                <div className="item-seletor">
+                  <button
+                    className={`seletor-checkbox ${selectedItems.includes(item.id) ? 'selected' : ''}`}
+                    onClick={() => toggleItemSelection(item.id)}
+                    aria-label={selectedItems.includes(item.id) ? 'Deselecionar item' : 'Selecionar item'}
                   >
-                    <i className="fas fa-trash"></i> Remover
+                    {selectedItems.includes(item.id) && <Check size={16} />}
                   </button>
+                </div>
+                
+                <div className="item-info">
+                  <div className="item-imagem">
+                    <img
+                      src={item.imagemUrl.startsWith("http") ? item.imagemUrl : `https://localhost:7252/${item.imagemUrl}`}
+                      alt={item.nome}
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/150?text=Produto+Sem+Imagem';
+                      }}
+                    />
+                  </div>
+                  <div className="item-detalhes">
+                    <h3>{item.nome}</h3>
+                    <p className="preco-unitario">{formatPrice(item.preco)}</p>
+                    <button 
+                      className="btn-remover" 
+                      onClick={() => removeFromCart(item.id)}
+                    >
+                      <Trash2 size={16} /> Remover
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="quantidade-controller">
+                  <button 
+                    onClick={() => decreaseQuantity(item.id)}
+                    disabled={item.quantidade <= 1}
+                  >
+                    <ChevronDown size={18} />
+                  </button>
+                  <span>{item.quantidade}</span>
+                  <button onClick={() => increaseQuantity(item.id)}>
+                    <ChevronUp size={18} />
+                  </button>
+                </div>
+                
+                <div className="item-total">
+                  <p>{formatPrice(item.preco * item.quantidade)}</p>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="carrinho-resumo">
-            <div className="resumo-detalhes">
+            <div className="resumo-card">
               <h3>Resumo do Pedido</h3>
+              
               <div className="resumo-linha">
-                <span>Subtotal ({itemCount()} itens):</span>
-                <span>R$ {cartTotal().toFixed(2)}</span>
+                <span>Itens selecionados</span>
+                <span>{selectedCount}</span>
               </div>
+              
               <div className="resumo-linha">
-                <span>Frete:</span>
-                <span>Grátis</span>
+                <span>Subtotal</span>
+                <span>{formatPrice(calculateSelectedTotal())}</span>
               </div>
+              
+              <div className="resumo-linha">
+                <span>Frete</span>
+                <span className="frete-gratis">Grátis</span>
+              </div>
+              
               <div className="resumo-linha total">
-                <span>Total:</span>
-                <span>R$ {cartTotal().toFixed(2)}</span>
+                <span>Total</span>
+                <span>{formatPrice(calculateSelectedTotal())}</span>
               </div>
-            </div>
-            
-            <div className="acoes-carrinho">
-              <button className="btn-continuar" onClick={() => navigate("/")}>
-                Continuar Comprando
+              
+              <button 
+                className="btn-primario btn-finalizar" 
+                onClick={finalizarCompra}
+                disabled={selectedCount === 0}
+              >
+                Finalizar Compra ({selectedCount})
               </button>
-              <button className="btn-limpar" onClick={clearCart}>
-                Limpar Carrinho
-              </button>
-              <button className="btn-finalizar" onClick={finalizarCompra}>
-                Finalizar Compra
+              
+              <button className="btn-secundario" onClick={clearCart}>
+                <Trash2 size={16} /> Limpar Carrinho
               </button>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

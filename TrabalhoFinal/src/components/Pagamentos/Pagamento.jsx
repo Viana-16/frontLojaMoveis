@@ -5,8 +5,9 @@ import { useCart } from "../../components/CartContext";
 const Pagamento = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { clearCart } = useCart();
+  const { removeItemsFromCart } = useCart();
   const pedido = location.state?.pedido;
+
 
   const [metodo, setMetodo] = useState("credito");
   const [form, setForm] = useState({ numeroCartao: "", validade: "", cvv: "" });
@@ -42,36 +43,38 @@ const Pagamento = () => {
 };
 
   const finalizarPedido = async () => {
-    if (!pedido || !camposValidos()) {
-      alert("❌ Preencha todos os dados obrigatórios corretamente.");
-      return;
+  if (!pedido || !camposValidos()) {
+    alert("❌ Preencha todos os dados obrigatórios corretamente.");
+    return;
+  }
+
+  setCarregando(true);
+
+  try {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const res = await fetch("https://localhost:7252/api/Pedido", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(pedido),
+    });
+
+    if (res.ok) {
+  const produtosComprados = pedido.produtos.map(p => p.produtoId);
+  removeItemsFromCart(produtosComprados); // <- Remove os itens comprados do carrinho
+
+  alert("✅ Pagamento confirmado e pedido finalizado!");
+  navigate("/", { state: { fromPayment: true } });
+}
+ else {
+      const erro = await res.text();
+      alert("❌ Erro ao salvar pedido: " + erro);
     }
-
-    setCarregando(true);
-
-    try {
-      // Simula tempo de processamento de pagamento
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      const res = await fetch("https://localhost:7252/api/Pedido", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(pedido),
-      });
-
-      if (res.ok) {
-        alert("✅ Pagamento confirmado e pedido finalizado!");
-        clearCart();
-        navigate("/");
-      } else {
-        const erro = await res.text();
-        alert("❌ Erro ao salvar pedido: " + erro);
-      }
-    } catch (error) {
-      alert("❌ Erro de conexão com servidor.");
-    } finally {
-      setCarregando(false);
-    }
+  } catch (error) {
+    alert("❌ Erro de conexão com servidor.");
+  } finally {
+    setCarregando(false);
+  }
   };
 
   if (!pedido) return <p>Nenhum pedido encontrado.</p>;
@@ -185,3 +188,54 @@ const Pagamento = () => {
 };
 
 export default Pagamento;
+
+
+
+// import React from "react";
+// import { useLocation, useNavigate } from "react-router-dom";
+// import { CheckCircle } from "lucide-react";
+// import "./Pagamento.css";
+
+// const Pagamento = () => {
+//   const location = useLocation();
+//   const navigate = useNavigate();
+
+//   Dados do pedido confirmado
+//   const pedido = location.state?.pedido;
+//   const selectedItems = location.state?.selectedItems;
+
+//   return (
+//     <div className="confirmacao-container">
+//       <div className="confirmacao-card">
+//         <CheckCircle size={64} color="#4CAF50" />
+//         <h2>Pagamento Confirmado!</h2>
+//         <p>Obrigado por sua compra.</p>
+        
+//         {pedido && (
+//           <div className="resumo-pedido">
+//             <h3>Resumo do Pedido</h3>
+//             <p>Número: #{pedido.id || '0000'}</p>
+//             <p>Total: {new Intl.NumberFormat('pt-BR', { 
+//               style: 'currency', 
+//               currency: 'BRL' 
+//             }).format(pedido.total)}</p>
+//           </div>
+//         )}
+
+//         <button 
+//           className="btn-primario"
+//           onClick={() => navigate("/", {
+//             state: {
+//               fromPayment: true,
+//               purchasedItems: selectedItems // Envia os itens comprados de volta
+//             }
+//           })}
+//         >
+//           Voltar à Loja
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Pagamento;

@@ -1,69 +1,4 @@
 /* .carrinho-container {
-  max-width: 900px;
-  margin: auto;
-  padding: 2rem;
-}
-
-.carrinho-itens {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.carrinho-item {
-  display: flex;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f9f9f9;
-}
-
-.carrinho-item img {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-}
-
-.carrinho-item .info {
-  padding: 1rem;
-  flex: 1;
-}
-
-.carrinho-item .info h3 {
-  margin-top: 0;
-}
-
-.carrinho-item .info button {
-  background: #e74c3c;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 0.5rem;
-}
-
-.carrinho-resumo {
-  margin-top: 2rem;
-  text-align: right;
-}
-
-.carrinho-resumo h3 {
-  margin-bottom: 1rem;
-}
-
-.finalizar {
-  background: #2ecc71;
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  border-radius: 10px;
-  cursor: pointer;
-} */
-
-
-.carrinho-container {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 1rem;
@@ -307,4 +242,393 @@
     width: 100%;
     margin-bottom: 0.5rem;
   }
+} */
+
+
+
+/* Adicione estas novas regras ao CSS existente */
+
+
+/* Estilos Gerais */
+.carrinho-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.carrinho-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.carrinho-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
+}
+
+.item-count {
+  font-size: 1rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.btn-voltar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #3e8e41;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
+
+.btn-voltar:hover {
+  text-decoration: underline;
+}
+
+/* Carrinho Vazio */
+.carrinho-vazio {
+  text-align: center;
+  padding: 3rem 0;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.icone-vazio {
+  position: relative;
+  width: fit-content;
+  margin: 0 auto 1rem;
+}
+
+.icone-vazio .x-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #ff4d4f;
+  opacity: 0.7;
+}
+
+.carrinho-vazio h3 {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.carrinho-vazio p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* Layout do Carrinho */
+.carrinho-content {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+@media (min-width: 992px) {
+  .carrinho-content {
+    flex-direction: row;
+  }
+  
+  .carrinho-itens {
+    flex: 2;
+  }
+  
+  .carrinho-resumo {
+    flex: 1;
+  }
+}
+
+/* Lista de Itens */
+.itens-header {
+  display: none;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eaeaea;
+  font-weight: 600;
+  color: #555;
+}
+
+@media (min-width: 768px) {
+  .itens-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+.carrinho-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #eaeaea;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .carrinho-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+.item-info {
+  display: flex;
+  gap: 1rem;
+}
+
+.item-imagem {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.item-imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.item-detalhes {
+  flex: 1;
+}
+
+.item-detalhes h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.preco-unitario {
+  margin: 0 0 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.btn-remover {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+}
+
+.btn-remover:hover {
+  text-decoration: underline;
+}
+
+/* Controle de Quantidade */
+.quantidade-controller {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.quantidade-controller button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+}
+
+.quantidade-controller button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quantidade-controller button:hover:not(:disabled) {
+  background: #eaeaea;
+}
+
+.quantidade-controller span {
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Total do Item */
+.item-total {
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+
+@media (min-width: 768px) {
+  .item-total {
+    text-align: right;
+  }
+}
+
+/* Resumo do Pedido */
+.resumo-card {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.resumo-card h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.resumo-linha {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  color: #555;
+}
+
+.resumo-linha.total {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eaeaea;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.frete-gratis {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+/* Botões */
+.btn-primario {
+  width: 100%;
+  padding: 1rem;
+  background: #3e8e41;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primario:hover {
+  background: #3e8e41;
+}
+
+.btn-secundario {
+  width: 100%;
+  padding: 1rem;
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-secundario:hover {
+  background: #ff343473;
+}
+
+.btn-finalizar {
+  margin-top: 2rem;
+}
+
+/* Seletor de Itens */
+.item-seletor {
+  display: flex;
+  align-items: center;
+  padding-right: 1rem;
+}
+
+.seletor-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.seletor-checkbox:hover {
+  border-color: #3e8e41;
+}
+
+.seletor-checkbox.selected {
+  background: #3e8e41;
+  border-color: #3e8e41;
+  color: white;
+}
+
+/* Ajuste no layout dos itens */
+.carrinho-item {
+  display: flex;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #eaeaea;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .carrinho-item {
+    display: grid;
+    grid-template-columns: auto 2fr 1fr 1fr;
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+/* Botão desabilitado */
+.btn-primario:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Melhorias na exibição de preços */
+.preco-unitario, .item-total p {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
+}
+
+.item-total p {
+  font-size: 1.1rem;
+}
+
+.resumo-linha span:last-child {
+  font-weight: 600;
 }
