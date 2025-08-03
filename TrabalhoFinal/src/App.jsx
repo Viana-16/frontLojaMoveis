@@ -59,7 +59,6 @@ import Sobre from './components/Sobre';
 import Login from './components/Login-e-Cadastro/Login';
 import CadastroCliente from './components/CadastroCliente';
 // import AdminDash from './components/AdminDash';
-import PainelAdmin from './components/PainelAdmin';
 
 
 import CadastroProduto from './components/CadastroProduto';
@@ -81,6 +80,7 @@ import EsqueciSenha from './components/EsqueciSenha';
 import MeuPerfil from './components/MeuPerfil/MeuPerfi';
 import Pagamento from './components/Pagamentos/Pagamento';
 import ProdutoDetalhes from './components/ProdutoDetalhes';
+import PedidosAdmin from './components/PedidosAdmin';
 
 
 
@@ -103,7 +103,8 @@ const App = () => {
         {/* <Route path="/admin" element={<AdminDash />} /> */}
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/meuperfil" element={<MeuPerfil/>} />
-        <Route path="/admin/painel" element={<PainelAdmin />} />
+        <Route path="/admin-painel" element={<PedidosAdmin/>} />
+        
 
 
         <Route path="/admin" element={<CadastroProduto />} />

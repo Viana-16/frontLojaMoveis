@@ -1,5 +1,6 @@
 // import React, { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
+// import './CadastroProduto.css';
 
 // const CadastroProduto = () => {
 //   const [produto, setProduto] = useState({
@@ -10,8 +11,10 @@
 //     imagem: null,
 //   });
 
-//   const [mensagem, setMensagem] = useState('');
+//   const [imagensExtras, setImagensExtras] = useState([]);
 //   const [imagemPreview, setImagemPreview] = useState(null);
+//   const [previewsExtras, setPreviewsExtras] = useState([]);
+//   const [mensagem, setMensagem] = useState('');
 //   const navigate = useNavigate();
 
 //   const handleChange = (e) => {
@@ -32,11 +35,19 @@
 //     }
 //   };
 
+//   const handleExtrasChange = (e) => {
+//     const files = Array.from(e.target.files);
+//     setImagensExtras(files);
+
+//     const previews = files.map((file) => URL.createObjectURL(file));
+//     setPreviewsExtras(previews);
+//   };
+
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 
 //     if (!produto.imagem) {
-//       setMensagem('Imagem obrigatória.');
+//       setMensagem('Imagem principal obrigatória.');
 //       return;
 //     }
 
@@ -45,7 +56,11 @@
 //     formData.append('preco', produto.preco);
 //     formData.append('descricao', produto.descricao);
 //     formData.append('categoria', produto.categoria);
-//     formData.append('imagem', produto.imagem); // nome precisa estar igual ao parâmetro no controller
+//     formData.append('imagem', produto.imagem); // imagem principal
+
+//     imagensExtras.forEach((img) => {
+//       formData.append('imagensExtras', img);
+//     });
 
 //     try {
 //       const res = await fetch('https://localhost:7252/api/Produto/upload', {
@@ -58,7 +73,6 @@
 //         setMensagem('✅ Produto cadastrado com sucesso!');
 //         console.log("Produto salvo:", data);
 
-//         // Redirecionar com base na categoria
 //         const categoria = data.categoria?.toLowerCase();
 //         if (categoria) navigate(`/${categoria}`);
 //       } else {
@@ -72,7 +86,7 @@
 //   };
 
 //   return (
-//     <div style={{ maxWidth: '500px', margin: 'auto' }}>
+//     <div style={{ maxWidth: '600px', margin: 'auto' }}>
 //       <h2 style={{ textAlign: 'center' }}>Cadastrar Produto</h2>
 //       <form onSubmit={handleSubmit} encType="multipart/form-data">
 //         <label>Nome:</label>
@@ -101,12 +115,12 @@
 //           <option value="lavanderia">Lavanderia</option>
 //         </select>
 
-//         <label>Imagem:</label>
+//         <label>Imagem principal:</label>
 //         <input name="imagem" type="file" accept="image/*" onChange={handleFileChange} required />
 
 //         {imagemPreview && (
 //           <div style={{ marginTop: 10 }}>
-//             <strong>Pré-visualização:</strong>
+//             <strong>Pré-visualização principal:</strong>
 //             <img
 //               src={imagemPreview}
 //               alt="Preview"
@@ -115,7 +129,23 @@
 //           </div>
 //         )}
 
-//         <button type="submit" style={{ marginTop: '15px' }}>Cadastrar</button>
+//         <label>Imagens extras (opcional):</label>
+//         <input type="file" accept="image/*" multiple onChange={handleExtrasChange} />
+
+//         {previewsExtras.length > 0 && (
+//           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10 }}>
+//             {previewsExtras.map((src, i) => (
+//               <img
+//                 key={i}
+//                 src={src}
+//                 alt={`Extra ${i + 1}`}
+//                 style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 6 }}
+//               />
+//             ))}
+//           </div>
+//         )}
+
+//         <button type="submit" style={{ marginTop: '20px' }}>Cadastrar Produto</button>
 //       </form>
 
 //       {mensagem && (
@@ -133,6 +163,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './CadastroProduto.css';
 
 const CadastroProduto = () => {
   const [produto, setProduto] = useState({
@@ -188,7 +219,7 @@ const CadastroProduto = () => {
     formData.append('preco', produto.preco);
     formData.append('descricao', produto.descricao);
     formData.append('categoria', produto.categoria);
-    formData.append('imagem', produto.imagem); // imagem principal
+    formData.append('imagem', produto.imagem);
 
     imagensExtras.forEach((img) => {
       formData.append('imagensExtras', img);
@@ -218,70 +249,122 @@ const CadastroProduto = () => {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: 'auto' }}>
-      <h2 style={{ textAlign: 'center' }}>Cadastrar Produto</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <label>Nome:</label>
-        <input name="nome" type="text" onChange={handleChange} required />
+    <div className="cadastro-container">
+      <h2 className="cadastro-titulo">Cadastrar Produto</h2>
+      <form onSubmit={handleSubmit} encType="multipart/form-data" className="cadastro-form">
+        <div className="form-group">
+          <label className="form-label">Nome:</label>
+          <input 
+            name="nome" 
+            type="text" 
+            onChange={handleChange} 
+            required 
+            className="form-input"
+          />
+        </div>
 
-        <label>Preço:</label>
-        <input name="preco" type="number" step="0.01" onChange={handleChange} required />
+        <div className="form-group">
+          <label className="form-label">Preço:</label>
+          <input 
+            name="preco" 
+            type="number" 
+            step="0.01" 
+            onChange={handleChange} 
+            required 
+            className="form-input"
+          />
+        </div>
 
-        <label>Descrição:</label>
-        <textarea name="descricao" onChange={handleChange} required />
+        <div className="form-group">
+          <label className="form-label">Descrição:</label>
+          <textarea 
+            name="descricao" 
+            onChange={handleChange} 
+            required 
+            className="form-textarea"
+          />
+        </div>
 
-        <label>Categoria:</label>
-        <select name="categoria" onChange={handleChange} required>
-          <option value="">Selecione</option>
-          <option value="lancamentos">Lançamentos</option>
-          <option value="promocoes">Promoções</option>
-          <option value="guarda-roupas">Guarda-Roupa</option>
-          <option value="sala-de-estar">Sala de Estar</option>
-          <option value="sofas">Sofás</option>
-          <option value="cozinhas">Cozinhas</option>
-          <option value="escritorio">Escritório</option>
-          <option value="banheiro">Banheiro</option>
-          <option value="paineis">Painéis</option>
-          <option value="estantes">Estantes</option>
-          <option value="camas">Camas</option>
-          <option value="lavanderia">Lavanderia</option>
-        </select>
+        <div className="form-group">
+          <label className="form-label">Categoria:</label>
+          <select 
+            name="categoria" 
+            onChange={handleChange} 
+            required 
+            className="form-select"
+          >
+            <option value="">Selecione</option>
+            <option value="lancamentos">Lançamentos</option>
+            <option value="promocoes">Promoções</option>
+            <option value="guarda-roupas">Guarda-Roupa</option>
+            <option value="sala-de-estar">Sala de Estar</option>
+            <option value="sofas">Sofás</option>
+            <option value="cozinhas">Cozinhas</option>
+            <option value="escritorio">Escritório</option>
+            <option value="banheiro">Banheiro</option>
+            <option value="paineis">Painéis</option>
+            <option value="estantes">Estantes</option>
+            <option value="camas">Camas</option>
+            <option value="lavanderia">Lavanderia</option>
+          </select>
+        </div>
 
-        <label>Imagem principal:</label>
-        <input name="imagem" type="file" accept="image/*" onChange={handleFileChange} required />
+        <div className="form-group">
+          <label className="form-label">Imagem principal:</label>
+          <input 
+            name="imagem" 
+            type="file" 
+            accept="image/*" 
+            onChange={handleFileChange} 
+            required 
+            className="form-file"
+          />
+        </div>
 
         {imagemPreview && (
-          <div style={{ marginTop: 10 }}>
-            <strong>Pré-visualização principal:</strong>
+          <div className="preview-group">
+            <span className="preview-label">Pré-visualização principal:</span>
             <img
               src={imagemPreview}
               alt="Preview"
-              style={{ width: '100%', maxHeight: 200, objectFit: 'cover' }}
+              className="preview-image"
             />
           </div>
         )}
 
-        <label>Imagens extras (opcional):</label>
-        <input type="file" accept="image/*" multiple onChange={handleExtrasChange} />
+        <div className="form-group">
+          <label className="form-label">Imagens extras (opcional):</label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            multiple 
+            onChange={handleExtrasChange} 
+            className="form-file"
+          />
+        </div>
 
         {previewsExtras.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10 }}>
-            {previewsExtras.map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt={`Extra ${i + 1}`}
-                style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 6 }}
-              />
-            ))}
+          <div className="extras-preview-container">
+            <span className="preview-label">Pré-visualização extras:</span>
+            <div className="extras-grid">
+              {previewsExtras.map((src, i) => (
+                <div key={i} className="extra-image-wrapper">
+                  <img
+                    src={src}
+                    alt={`Extra ${i + 1}`}
+                    className="extra-image"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        <button type="submit" style={{ marginTop: '20px' }}>Cadastrar Produto</button>
+        <button type="submit" className="submit-button">Cadastrar Produto</button>
       </form>
 
       {mensagem && (
-        <p style={{ color: mensagem.includes('sucesso') ? 'green' : 'red', marginTop: '10px' }}>
+        <p className={`mensagem ${mensagem.includes('sucesso') ? 'mensagem-sucesso' : 'mensagem-erro'}`}>
           {mensagem}
         </p>
       )}

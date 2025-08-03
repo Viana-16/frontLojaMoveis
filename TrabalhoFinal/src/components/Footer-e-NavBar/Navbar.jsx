@@ -118,7 +118,7 @@ const Navbar = () => {
               {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}
             </NavLink>
             
-            {cliente ? (
+            {/* {cliente ? (
               <div 
                 className="user-container"
                 onMouseEnter={handleMouseEnterDropdown}
@@ -150,7 +150,7 @@ const Navbar = () => {
                       Minha Conta
                     </NavLink>
                     <NavLink 
-                      to="/meuspedidos" 
+                      to="/meuperfil" 
                       className="dropdown-item"
                       onClick={() => setShowUserDropdown(false)}
                     >
@@ -169,7 +169,84 @@ const Navbar = () => {
               <NavLink to="/conta" className="login-text-btn">
                 Entrar
               </NavLink>
-            )}
+            )} */}
+
+            {cliente ? (
+  <div 
+    className="user-container"
+    onMouseEnter={handleMouseEnterDropdown}
+    onMouseLeave={handleMouseLeaveDropdown}
+  >
+    <button 
+      className="user-icon-btn"
+      onClick={() => setShowUserDropdown(!showUserDropdown)}
+    >
+      <User size={20} />
+    </button>
+    
+    {showUserDropdown && (
+      <div 
+        className="user-dropdown"
+        onMouseEnter={handleMouseEnterDropdown}
+        onMouseLeave={handleMouseLeaveDropdown}
+      >
+        <div className="user-info">
+          <p className="user-greeting">Olá, {cliente.nome || cliente.email}</p>
+          {cliente.email && <p className="user-email">{cliente.email}</p>}
+        </div>
+        <div className="dropdown-divider"></div>
+
+        {cliente.tipo === "admin" ? (
+          <>
+            <NavLink 
+              to="/admin" 
+              className="dropdown-item"
+              onClick={() => setShowUserDropdown(false)}
+            >
+              Cadastrar Produtos
+            </NavLink>
+
+            <NavLink 
+              to="/admin-painel" 
+              className="dropdown-item"
+              onClick={() => setShowUserDropdown(false)}
+            >
+              Editar Produtos
+            </NavLink>
+          </>
+        ) : (
+          <>
+            <NavLink 
+              to="/meuperfil" 
+              className="dropdown-item"
+              onClick={() => setShowUserDropdown(false)}
+            >
+              Minha Conta
+            </NavLink>
+            <NavLink 
+              to="/meuperfil" 
+              className="dropdown-item"
+              onClick={() => setShowUserDropdown(false)}
+            >
+              Meus Pedidos
+            </NavLink>
+          </>
+        )}
+
+        <button 
+          className="dropdown-item logout-btn"
+          onClick={handleLogout}
+        >
+          Sair
+        </button>
+      </div>
+    )}
+  </div>
+) : (
+  <NavLink to="/conta" className="login-text-btn">
+    Entrar
+  </NavLink>
+)}
             
             <button 
               className="mobile-menu-btn" 
