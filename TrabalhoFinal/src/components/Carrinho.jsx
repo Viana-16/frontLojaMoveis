@@ -76,7 +76,7 @@ const Carrinho = () => {
         })),
       total: calculateSelectedTotal(),
       dataPedido: new Date().toISOString(),
-      status: "Pendente"
+      status: "pendente"
     };
 
 

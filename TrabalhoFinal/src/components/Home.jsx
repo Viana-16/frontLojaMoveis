@@ -166,16 +166,16 @@ export default function Home() {
       <h2 className="titulo-categorias">Navegue por Categorias e Ambientes</h2>
       <section className="grid-categorias">
         {[
-          { nome: "Guarda-Roupas", imagem: "/img/G-Rcategoria.avif", rota: "/guarda-roupas" },
-          { nome: "Sala de Estar", imagem: "/img/S-Ecategoria.avif", rota: "/sala-de-estar" },
-          { nome: "Sofás", imagem: "/img/Sofascategoria.avif", rota: "/sofas" },
-          { nome: "Cozinha", imagem: "/img/Cozinhacategoria.avif", rota: "/cozinha" },
-          { nome: "Banheiro", imagem: "/img/Banheirocategoria.avif", rota: "/banheiro" },
-          { nome: "Escritorio", imagem: "/img/Escritoriocategoria.avif", rota: "/escritorio" },
-          { nome: "Painéis", imagem: "/img/Paineiscategoria.avif", rota: "/paineis" },
-          { nome: "Estantes", imagem: "/img/Estantescategoria.avif", rota: "/estantes" },
-          { nome: "Camas", imagem: "/img/Camacategoria.avif", rota: "/camas" },
-          { nome: "Lavanderia", imagem: "/img/Lavanderiacategoria.avif", rota: "/lavanderia" }
+          { nome: "Guarda-Roupas", imagem: "/img/guardaroupa.avif", rota: "/guarda-roupas" },
+          { nome: "Sala de Estar", imagem: "/img/saladeestar.avif", rota: "/sala-de-estar" },
+          { nome: "Sofás", imagem: "/img/sofas.avif", rota: "/sofas" },
+          { nome: "Cozinha", imagem: "/img/cozinha.avif", rota: "/cozinha" },
+          { nome: "Banheiro", imagem: "/img/banheiro.avif", rota: "/banheiro" },
+          { nome: "Escritorio", imagem: "/img/escritorio.avif", rota: "/escritorio" },
+          { nome: "Painéis", imagem: "/img/paineis.avif", rota: "/paineis" },
+          { nome: "Portas e Janelas", imagem: "/img/portasejanelas.avif", rota: "/portas-e-janelas" },
+          { nome: "Camas", imagem: "/img/cama.avif", rota: "/camas" },
+          { nome: "Lavanderia", imagem: "/img/lavanderia.avif", rota: "/lavanderia" }
         ].map((cat, index) => (
           <Link
             key={index}
