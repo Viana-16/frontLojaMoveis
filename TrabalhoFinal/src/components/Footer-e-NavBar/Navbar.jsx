@@ -218,18 +218,22 @@ const Navbar = () => {
           <>
             <NavLink 
               to="/meuperfil" 
+              state={{ aba: 'dados'}}
               className="dropdown-item"
               onClick={() => setShowUserDropdown(false)}
             >
               Minha Conta
             </NavLink>
+           
             <NavLink 
               to="/meuperfil" 
+              state={{ aba: 'pedidos' }} 
               className="dropdown-item"
               onClick={() => setShowUserDropdown(false)}
             >
-              Meus Pedidos
+              Meus Pedidos  
             </NavLink>
+
           </>
         )}
 

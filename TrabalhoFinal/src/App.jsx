@@ -51,6 +51,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'; // Ajuste o caminho conforme necessário
 import Navbar from './components/Footer-e-NavBar/Navbar';
 import Footer from './components/Footer-e-NavBar/Footer';
+
 import Home from './components/Home';
 import Carrinho from './components/Carrinho';
 import RastrearPedido from './components/RastrearPedido';
@@ -81,6 +82,7 @@ import MeuPerfil from './components/MeuPerfil/MeuPerfi';
 import Pagamento from './components/Pagamentos/Pagamento';
 import ProdutoDetalhes from './components/ProdutoDetalhes';
 import PedidosAdmin from './components/PedidosAdmin';
+import ScrollToTop from './components/ScrollToTop';
 
 
 
@@ -89,7 +91,7 @@ const App = () => {
   return (
     <Router>
       <Navbar />
-
+      <ScrollToTop />
       <Routes>
         {/* Páginas principais */}
         <Route path="/" element={<Home />} />
