@@ -311,7 +311,11 @@ const EnderecosUsuario = () => {
   const [carregando, setCarregando] = useState(true);
   const [formularioVisivel, setFormularioVisivel] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
-  const [enderecoAtivo, setEnderecoAtivo] = useState(localStorage.getItem('enderecoAtivo') || null);
+  // const [enderecoAtivo, setEnderecoAtivo] = useState(localStorage.getItem('enderecoAtivo') || null);
+  const [enderecoAtivo, setEnderecoAtivo] = useState(() => {
+  const salvo = localStorage.getItem('enderecoAtivo');
+  return salvo ? JSON.parse(salvo) : null;
+});
   const [formEndereco, setFormEndereco] = useState({
     nome: '', sobrenome: '', cep: '', rua: '', numero: '',
     bairro: '', cidade: '', estado: '', telefone: '', complemento: ''
@@ -551,18 +555,18 @@ const EnderecosUsuario = () => {
     <div className="endereco-checkbox">
       <label>
         <input
-          type="checkbox"
-          checked={endereco.id === enderecoAtivo}
-          onChange={() => {
-            const novoId = endereco.id === enderecoAtivo ? null : endereco.id;
-            setEnderecoAtivo(novoId);
-            if (novoId) {
-              localStorage.setItem('enderecoAtivo', novoId);
-            } else {
-              localStorage.removeItem('enderecoAtivo');
-            }
-          }}
-        />
+  type="checkbox"
+  checked={endereco.id === enderecoAtivo}
+  onChange={() => {
+    const novoId = endereco.id === enderecoAtivo ? null : endereco.id;
+    setEnderecoAtivo(novoId);
+    if (novoId) {
+      localStorage.setItem('enderecoAtivo', JSON.stringify(novoId)); // 🔒 Garante que salva string
+    } else {
+      localStorage.removeItem('enderecoAtivo');
+    }
+  }}
+/>
         Usar como endereço ativo
       </label>
     </div>
