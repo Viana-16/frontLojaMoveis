@@ -194,7 +194,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../../components/CartContext";
-import "./pagamento.css";
+import "./Pagamento.css";
 
 const Pagamento = () => {
   const location = useLocation();
