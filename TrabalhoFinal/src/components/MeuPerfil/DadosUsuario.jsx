@@ -89,7 +89,7 @@ const DadosUsuario = () => {
       // Remove máscara para salvar “limpo” no banco (opcional)
       const telefoneLimpo = form.telefone.replace(/\D/g, '');
 
-      const res = await fetch(`https://localhost:7252/api/Cliente/${cliente.id}/basico`, {
+      const res = await fetch(`https://lojamoveis.onrender.com/api/Cliente/${cliente.id}/basico`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

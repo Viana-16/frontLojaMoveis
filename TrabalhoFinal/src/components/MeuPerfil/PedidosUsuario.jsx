@@ -18,7 +18,7 @@ const PedidosUsuarios = () => {
       const emailEncoded = encodeURIComponent(user.email);
       setLoading(true);
       
-      fetch(`https://localhost:7252/api/Pedido/por-email/${emailEncoded}`)
+      fetch(`https://lojamoveis.onrender.com/api/Pedido/por-email/${emailEncoded}`)
         .then(res => {
           if (!res.ok) throw new Error("Erro ao buscar pedidos.");
           return res.json();

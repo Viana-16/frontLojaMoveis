@@ -65,7 +65,7 @@ const CadastroProduto = () => {
     });
 
     try {
-      const res = await fetch('https://localhost:7252/api/Produto/upload', {
+      const res = await fetch('https://lojamoveis.onrender.com/api/Produto/upload', {
         method: 'POST',
         body: formData,
       });

@@ -1,77 +1,3 @@
-// import React, { useState } from "react";
-
-// const AdminDash = () => {
-//   const [produto, setProduto] = useState({
-//     nome: "",
-//     preco: "",
-//     descricao: "",
-//     categoria: ""
-//   });
-//   const [imagem, setImagem] = useState(null);
-//   const [mensagem, setMensagem] = useState("");
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setProduto({ ...produto, [name]: value });
-//   };
-
-//   const handleFileChange = (e) => {
-//     setImagem(e.target.files[0]);
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     const formData = new FormData();
-//     formData.append("nome", produto.nome);
-//     formData.append("preco", produto.preco);
-//     formData.append("descricao", produto.descricao);
-//     formData.append("categoria", produto.categoria);
-//     if (imagem) formData.append("imagem", imagem);
-
-//     try {
-//       const res = await fetch("https://localhost:7252/api/Produto/upload", {
-//         method: "POST",
-//         body: formData,
-//       });
-
-//       const data = await res.text();
-//       if (res.ok) {
-//         setMensagem("Produto adicionado com sucesso!");
-//         setProduto({ nome: "", preco: "", descricao: "", categoria: "" });
-//         setImagem(null);
-//       } else {
-//         setMensagem(data || "Erro ao adicionar o produto.");
-//       }
-//     } catch (error) {
-//       setMensagem("Erro ao conectar com o servidor.");
-//     }
-//   };
-
-//   return (
-//     <div className="admin-dash">
-//       <h2>Adicionar Produto</h2>
-//       <form onSubmit={handleSubmit}>
-//         <input name="nome" placeholder="Nome" value={produto.nome} onChange={handleChange} required />
-//         <input name="preco" placeholder="Preço" type="number" value={produto.preco} onChange={handleChange} required />
-//         <textarea name="descricao" placeholder="Descrição" value={produto.descricao} onChange={handleChange} required />
-//         <select name="categoria" value={produto.categoria} onChange={handleChange} required>
-//           <option value="">Selecione a categoria</option>
-//           <option value="Lançamentos">Lançamentos</option>
-//           <option value="Sofás">Sofás</option>
-//           <option value="Cozinha">Cozinha</option>
-//           {/* Adicione mais categorias conforme quiser */}
-//         </select>
-//         <input type="file" accept="image/*" onChange={handleFileChange} required />
-//         <button type="submit">Adicionar Produto</button>
-//       </form>
-//       {mensagem && <p>{mensagem}</p>}
-//     </div>
-//   );
-// };
-
-// export default AdminDash;
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -106,7 +32,7 @@ const AdminDash = () => {
     formData.append('imagem', produto.imagem);
 
     try {
-      const res = await fetch('https://localhost:7252/api/Produto/upload', {
+      const res = await fetch('https://lojamoveis.onrender.com/api/Produto/upload', {
         method: 'POST',
         body: formData,
       });

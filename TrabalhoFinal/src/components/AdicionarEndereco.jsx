@@ -54,7 +54,7 @@ const AdicionarEndereco = () => {
     };
 
     try {
-      const res = await fetch('https://localhost:7252/api/Endereco', {
+      const res = await fetch('https://lojamoveis.onrender.com/api/Endereco', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)

@@ -326,7 +326,7 @@ const EnderecosUsuario = () => {
     if (!email) return;
 
     try {
-      const res = await fetch(`https://localhost:7252/api/Endereco/${email}`);
+      const res = await fetch(`https://lojamoveis.onrender.com/api/Endereco/${email}`);
       const dados = await res.json();
       setEnderecos(Array.isArray(dados) ? dados : []);
     } catch (err) {
@@ -376,8 +376,8 @@ const EnderecosUsuario = () => {
 
     try {
       const url = editandoId
-        ? `https://localhost:7252/api/Endereco/${editandoId}`
-        : 'https://localhost:7252/api/Endereco';
+        ? `https://lojamoveis.onrender.com/api/Endereco/${editandoId}`
+        : 'https://lojamoveis.onrender.com/api/Endereco';
       const method = editandoId ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
@@ -420,7 +420,7 @@ const EnderecosUsuario = () => {
   const handleExcluir = async (id) => {
     if (!window.confirm('Tem certeza que deseja excluir este endereço?')) return;
     try {
-      await fetch(`https://localhost:7252/api/Endereco/${id}`, { method: 'DELETE' });
+      await fetch(`https://lojamoveis.onrender.com/api/Endereco/${id}`, { method: 'DELETE' });
       await carregarEnderecos();
     } catch (err) {
       console.error('Erro ao excluir endereço:', err);

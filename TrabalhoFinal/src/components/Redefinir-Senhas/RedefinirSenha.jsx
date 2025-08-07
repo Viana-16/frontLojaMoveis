@@ -1,54 +1,3 @@
-// import React, { useState } from 'react';
-// import { useParams, useNavigate } from 'react-router-dom';
-
-// const RedefinirSenha = () => {
-//   const { token } = useParams();
-//   const navigate = useNavigate();
-//   const [novaSenha, setNovaSenha] = useState('');
-//   const [mensagem, setMensagem] = useState('');
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       const res = await fetch('https://localhost:7252/api/Login/redefinir-senha', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ token, novaSenha }) // <-- Correto agora
-//       });
-
-//       if (res.ok) {
-//         setMensagem('Senha redefinida com sucesso!');
-//         setTimeout(() => navigate('/conta'), 2000);
-//       } else {
-//         const erro = await res.text();
-//         setMensagem(`Erro: ${erro}`);
-//       }
-//     } catch {
-//       setMensagem('Erro ao conectar com o servidor.');
-//     }
-//   };
-
-//   return (
-//     <div style={{ maxWidth: '400px', margin: 'auto' }}>
-//       <h2>Redefinir Senha</h2>
-//       <form onSubmit={handleSubmit}>
-//         <label>Nova Senha:</label>
-//         <input
-//           type="password"
-//           value={novaSenha}
-//           onChange={(e) => setNovaSenha(e.target.value)}
-//           required
-//         />
-//         <button type="submit">Redefinir</button>
-//       </form>
-//       {mensagem && <p>{mensagem}</p>}
-//     </div>
-//   );
-// };
-
-// export default RedefinirSenha;
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './RedefinirSenha.css';
@@ -64,7 +13,7 @@ const RedefinirSenha = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch('https://localhost:7252/api/Login/redefinir-senha', {
+      const res = await fetch('https://lojamoveis.onrender.com/api/Login/redefinir-senha', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, novaSenha })

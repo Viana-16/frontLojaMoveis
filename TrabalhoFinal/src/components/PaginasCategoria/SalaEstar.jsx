@@ -55,7 +55,7 @@ const SalaEstar = () => {
   const { addToCart } = useCart(); // função para adicionar ao carrinho
 
   useEffect(() => {
-    fetch("https://localhost:7252/api/Produto")
+    fetch("https://lojamoveis.onrender.com/api/Produto")
       .then((res) => res.json())
       .then((data) => {
         const produtosFiltrados = data.filter(

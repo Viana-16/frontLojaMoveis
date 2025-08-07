@@ -1,47 +1,3 @@
-// import React, { useEffect, useState } from "react";
-
-// const Estantes = () => {
-//   const [produtos, setProdutos] = useState([]);
-
-//   useEffect(() => {
-//     fetch("https://localhost:7252/api/Produto")
-//       .then((res) => res.json())
-//       .then((data) => {
-//         console.log("Todos os produtos da API:", data);
-
-//         const produtosFiltrados = data.filter(
-//           (p) => p.categoria.toLowerCase() === "estantes"
-//         );
-
-//         console.log("Produtos filtrados pela categoria 'estantes':", produtosFiltrados);
-
-//         setProdutos(produtosFiltrados);
-//       })
-//       .catch((err) => console.error("Erro ao buscar produtos:", err));
-//   }, []);
-
-//   return (
-//     <div className="categoria-pagina">
-//       <h2>Categoria: Estantes</h2>
-//       <div className="lista-produtos">
-//         {produtos.map((produto) => (
-//           <div className="produto-card" key={produto.id}>
-//             <img
-//               src={`https://localhost:7252/${produto.imagemUrl}`}
-//               alt={produto.nome}
-//             />
-//             <h3>{produto.nome}</h3>
-//             <p className="descricao">{produto.descricao}</p>
-//             <p className="preco">R$ {produto.preco}</p>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Estantes;
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../components/UserContext";
@@ -54,7 +10,7 @@ const Estantes = () => {
   const { addToCart } = useCart(); // função para adicionar ao carrinho
 
   useEffect(() => {
-    fetch("https://localhost:7252/api/Produto")
+    fetch("https://lojamoveis.onrender.com/api/Produto")
       .then((res) => res.json())
       .then((data) => {
         const produtosFiltrados = data.filter(

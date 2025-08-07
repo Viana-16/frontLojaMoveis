@@ -17,11 +17,11 @@ const PedidosAdmin = () => {
   const carregarPedidos = async () => {
     try {
       setLoading(true);
-      let url = 'https://localhost:7252/api/Pedido';
+      let url = 'https://lojamoveis.onrender.com/api/Pedido';
       
       if (emailFiltro) {
         const emailEncoded = encodeURIComponent(emailFiltro);
-        url = `https://localhost:7252/api/Pedido/por-email/${emailEncoded}`;
+        url = `https://lojamoveis.onrender.com/api/Pedido/por-email/${emailEncoded}`;
       }
 
       const response = await fetch(url);
@@ -49,7 +49,7 @@ const PedidosAdmin = () => {
         status: novoStatus
       };
 
-      const response = await fetch(`https://localhost:7252/api/Pedido/${pedidoId}`, {
+      const response = await fetch(`https://lojamoveis.onrender.com/api/Pedido/${pedidoId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -8,7 +8,7 @@ export default function ProdutoDetalhes() {
   const [imagemIndex, setImagemIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`https://localhost:7252/api/Produto/${id}`)
+    fetch(`https://lojamoveis.onrender.com/api/Produto/${id}`)
       .then((res) => res.json())
       .then((data) => setProduto(data))
       .catch((err) => console.error("Erro ao buscar produto:", err));
