@@ -1,52 +1,3 @@
-
-
-// // import React from 'react';
-// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import Navbar from './components/Navbar';
-// import Footer from './components/Footer';
-// import Home from './components/Home';
-// import Carrinho from './components/Carrinho';
-// import RastrearPedido from './components/RastrearPedido';
-// import Atendimento from './components/Atendimento';
-// import Sobre from './components/Sobre';
-// import Login from './components/Login';
-// import CadastroCliente from './components/CadastroCliente';
-// import ClienteDash from './components/ClienteDash';
-// import AdminDash from './components/AdminDash';
-// import Perfil from './components/Perfil';
-// import PainelAdmin from './components/PainelAdmin';
-
- 
-
- 
-
-// const App = () => {
-//   return (
-//     <Router>
-//       <Navbar />
-
-//       <Routes>
-//         <Route path="/" element={<Home />} />
-//         <Route path="/home" element={<Home />} />
-//         <Route path="/carrinho" element={<Carrinho />} />
-//         <Route path="/rastrearpedido" element={<RastrearPedido />} />
-//         <Route path="/atendimento" element={<Atendimento />} />
-//         <Route path="/conta" element={<Login />} />
-//         <Route path="/cadastro" element={<CadastroCliente />} />
-//         <Route path="/admin" element={<AdminDash />} />
-//         <Route path="/cliente" element={<ClienteDash />} />
-//         <Route path="/sobre" element={<Sobre />} />
-//         <Route path="/perfil" element={<Perfil />} />
-//         <Route path="/admin/painel" element={<PainelAdmin />} />
-//       </Routes>
-
-//       <Footer />
-//     </Router>
-//   );
-// };
-
-// export default App;
-
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'; // Ajuste o caminho conforme necessário
 import Navbar from './components/Footer-e-NavBar/Navbar';
@@ -54,7 +5,6 @@ import Footer from './components/Footer-e-NavBar/Footer';
 
 import Home from './components/Home';
 import Carrinho from './components/Carrinho';
-import RastrearPedido from './components/RastrearPedido';
 import Atendimento from './components/Atendimento';
 import Sobre from './components/Sobre';
 import Login from './components/Login-e-Cadastro/Login';
@@ -76,8 +26,8 @@ import Camas from './components/PaginasCategoria/Camas';
 import Lavanderia from './components/PaginasCategoria/Lavanderia';
 import Promocoes from './components/PaginasCategoria/Promocoes';
 import Buscar from './components/Barra-Pesquisa/Buscar';
-import RedefinirSenha from './components/RedefinirSenha';
-import EsqueciSenha from './components/EsqueciSenha';
+import RedefinirSenha from './components/Redefinir-Senhas/RedefinirSenha';
+import EsqueciSenha from './components/Redefinir-Senhas/EsqueciSenha';
 import MeuPerfil from './components/MeuPerfil/MeuPerfi';
 import Pagamento from './components/Pagamentos/Pagamento';
 import ProdutoDetalhes from './components/ProdutoDetalhes';
@@ -98,7 +48,6 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/carrinho" element={<Carrinho />} />
         <Route path="/pagamento" element={<Pagamento />} />
-        <Route path="/rastrearpedido" element={<RastrearPedido />} />
         <Route path="/atendimento" element={<Atendimento />} />
         <Route path="/conta" element={<Login />} />
         <Route path="/cadastro" element={<CadastroCliente />} />

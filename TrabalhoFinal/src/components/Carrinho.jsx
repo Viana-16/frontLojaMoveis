@@ -296,13 +296,21 @@ const Carrinho = () => {
     setSelectedItems([]);
   };
 
-  const finalizarCompra = () => {
-    const enderecoAtivo = JSON.parse(localStorage.getItem('enderecoAtivo'));
+  const finalizarCompra = async () => {
+  const enderecoAtivoId = localStorage.getItem('enderecoAtivo');
 
-    if (!enderecoAtivo) {
-      setShowAddressModal(true);
-      return;
-    }
+  if (!enderecoAtivoId) {
+    setShowAddressModal(true);
+    return;
+  }
+
+  try {
+    // Busca o texto do endereço ativo pelo ID
+    const res = await fetch(`https://localhost:7252/api/Endereco/id/${enderecoAtivoId.replace(/"/g, '')}`);
+    if (!res.ok) throw new Error('Endereço não encontrado');
+    
+    const endereco = await res.json();
+    const enderecoAtivoTexto = endereco.textoEndereco; // ✅ agora sim essa variável existe
 
     const pedido = {
       email: user.email,
@@ -316,12 +324,12 @@ const Carrinho = () => {
         })),
       total: calculateSelectedTotal(),
       dataPedido: new Date().toISOString(),
+      textoEndereco: enderecoAtivoTexto, // ✅ envia junto com o pedido
       status: "pendente"
     };
 
     setShowCheckoutModal(true);
-    
-    // Navega após 2 segundos (para mostrar o modal)
+
     setTimeout(() => {
       navigate("/pagamento", { 
         state: { 
@@ -330,7 +338,12 @@ const Carrinho = () => {
         } 
       });
     }, 2000);
-  };
+
+  } catch (err) {
+    console.error('Erro ao buscar o endereço ativo:', err);
+    alert('Erro ao buscar o endereço. Tente novamente.');
+  }
+};
 
 
 
@@ -493,10 +506,12 @@ const Carrinho = () => {
               <p>Você precisa selecionar um endereço para continuar com o pagamento.</p>
             </div>
             <div className="modal-footer">
-              <button className="btn-primario" onClick={() => {
+              <button 
+                className="btn-primario" 
+                onClick={() => {
                 setShowAddressModal(false);
-                navigate("/meuperfil");
-              }}>
+                navigate("/meuperfil", { state: { aba: 'enderecos' } });
+                }}>
                 Selecionar Endereço
               </button>
             </div>
