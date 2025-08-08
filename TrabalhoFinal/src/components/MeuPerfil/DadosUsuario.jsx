@@ -19,7 +19,7 @@ const DadosUsuario = () => {
 
     const fetchCliente = async () => {
       try {
-        const res = await fetch(`https://localhost:7252/api/Cliente/email/${usuarioSalvo.email}`);
+        const res = await fetch(`https://lojamoveis.onrender.com/api/Cliente/email/${usuarioSalvo.email}`);
         if (res.ok) {
           const data = await res.json();
           setCliente(data);

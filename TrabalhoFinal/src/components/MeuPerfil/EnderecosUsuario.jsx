@@ -9,6 +9,11 @@
 //   const [carregando, setCarregando] = useState(true);
 //   const [formularioVisivel, setFormularioVisivel] = useState(false);
 //   const [editandoId, setEditandoId] = useState(null);
+//   // const [enderecoAtivo, setEnderecoAtivo] = useState(localStorage.getItem('enderecoAtivo') || null);
+//   const [enderecoAtivo, setEnderecoAtivo] = useState(() => {
+//   const salvo = localStorage.getItem('enderecoAtivo');
+//   return salvo ? JSON.parse(salvo) : null;
+// });
 //   const [formEndereco, setFormEndereco] = useState({
 //     nome: '', sobrenome: '', cep: '', rua: '', numero: '',
 //     bairro: '', cidade: '', estado: '', telefone: '', complemento: ''
@@ -19,7 +24,7 @@
 //     if (!email) return;
 
 //     try {
-//       const res = await fetch(`https://localhost:7252/api/Endereco/${email}`);
+//       const res = await fetch(`https://lojamoveis.onrender.com/api/Endereco/${email}`);
 //       const dados = await res.json();
 //       setEnderecos(Array.isArray(dados) ? dados : []);
 //     } catch (err) {
@@ -69,8 +74,8 @@
 
 //     try {
 //       const url = editandoId
-//         ? `https://localhost:7252/api/Endereco/${editandoId}`
-//         : 'https://localhost:7252/api/Endereco';
+//         ? `https://lojamoveis.onrender.com/api/Endereco/${editandoId}`
+//         : 'https://lojamoveis.onrender.com/api/Endereco';
 //       const method = editandoId ? 'PUT' : 'POST';
 
 //       const res = await fetch(url, {
@@ -93,7 +98,7 @@
 //   const handleEditar = (endereco) => {
 //     const partes = endereco.textoEndereco.split(',');
 //     const complementoMatch = partes[2]?.match(/\(([^)]+)\)/);
-    
+
 //     setFormEndereco({
 //       nome: partes[0]?.split(' ')[0] || '',
 //       sobrenome: partes[0]?.split(' ').slice(1).join(' ') || '',
@@ -113,7 +118,7 @@
 //   const handleExcluir = async (id) => {
 //     if (!window.confirm('Tem certeza que deseja excluir este endereço?')) return;
 //     try {
-//       await fetch(`https://localhost:7252/api/Endereco/${id}`, { method: 'DELETE' });
+//       await fetch(`https://lojamoveis.onrender.com/api/Endereco/${id}`, { method: 'DELETE' });
 //       await carregarEnderecos();
 //     } catch (err) {
 //       console.error('Erro ao excluir endereço:', err);
@@ -155,22 +160,22 @@
 //             <form className="form-endereco" onSubmit={handleSalvarEndereco}>
 //               <h3>{editandoId ? 'Editar Endereço' : 'Adicionar Novo Endereço'}</h3>
               
-//               <div className="form-grid">
-//                 <div className="form-group">
-//                   <label>Nome</label>
-//                   <input type="text" name="nome" value={formEndereco.nome} onChange={handleChange} required />
+//                <div className="form-grid">
+//                  <div className="form-group">
+//                    <label>Nome</label>
+//                    <input type="text" name="nome" value={formEndereco.nome} onChange={handleChange} required />
 //                 </div>
                 
-//                 <div className="form-group">
-//                   <label>Sobrenome</label>
+//                  <div className="form-group">
+//                    <label>Sobrenome</label>
 //                   <input type="text" name="sobrenome" value={formEndereco.sobrenome} onChange={handleChange} required />
-//                 </div>
+//                  </div>
                 
-//                 <div className="form-group">
-//                   <label>CEP</label>
-//                   <input 
-//                     type="text" 
-//                     name="cep" 
+//                  <div className="form-group">
+//                    <label>CEP</label>
+//                    <input 
+//                      type="text" 
+//                      name="cep" 
 //                     value={formEndereco.cep} 
 //                     onChange={handleChange} 
 //                     onBlur={buscarEndereco} 
@@ -241,52 +246,63 @@
 //           )}
 
 //           {enderecos.length > 0 ? (
-//   <div className="lista-enderecos">
-//     {enderecos.map((endereco, index) => (
-//       <div key={index} className="card-endereco">
-//         <div className="endereco-icone">
-//           <MapPin size={20} />
-//         </div>
-//         <div className="endereco-info">
-//           <h4>Endereço {index + 1}</h4>
-//           <p>{endereco.textoEndereco.split(', Tel:')[0]}</p>
-//           {endereco.textoEndereco.includes('Tel:') && (
-//             <p className="endereco-telefone">
-//               {formatarTelefone(endereco.textoEndereco.split('Tel:')[1])}
-//             </p>
-//           )}
-//         </div>
-//         <div className="endereco-acoes">
-//           <button 
-//             className="btn-editar"
-//             onClick={() => handleEditar(endereco)}
-//             aria-label="Editar endereço"
-//             title="Editar endereço"
-//           >
-//             <Edit size={16} />
-//             <span>Editar</span>
-//           </button>
-//           <button 
-//             className="btn-excluir"
-//             onClick={() => handleExcluir(endereco.id)}
-//             aria-label="Excluir endereço"
-//             title="Excluir endereço"
-//           >
-//             <Trash2 size={16} />
-//             <span>Excluir</span>
-//           </button>
-//         </div>
+//             <div className="lista-enderecos">
+//               {enderecos.map((endereco, index) => (
+//   <div key={endereco.id} className="endereco-wrapper-externo">
+    
+//     <div className="endereco-checkbox">
+//       <label>
+//         <input
+//   type="checkbox"
+//   checked={endereco.id === enderecoAtivo}
+//   onChange={() => {
+//     const novoId = endereco.id === enderecoAtivo ? null : endereco.id;
+//     setEnderecoAtivo(novoId);
+//     if (novoId) {
+//       localStorage.setItem('enderecoAtivo', JSON.stringify(novoId)); // 🔒 Garante que salva string
+//     } else {
+//       localStorage.removeItem('enderecoAtivo');
+//     }
+//   }}
+// />
+//         Usar como endereço ativo
+//       </label>
+//     </div>
+
+//     <div className={`card-endereco ${endereco.id === enderecoAtivo ? 'ativo' : ''}`}>
+//       <div className="endereco-icone">
+//         <MapPin size={20} />
 //       </div>
-//     ))}
+//       <div className="endereco-info">
+//         <h4>Endereço {index + 1}</h4>
+//         <p>{endereco.textoEndereco.split(', Tel:')[0]}</p>
+//         {endereco.textoEndereco.includes('Tel:') && (
+//           <p className="endereco-telefone">
+//             {formatarTelefone(endereco.textoEndereco.split('Tel:')[1])}
+//           </p>
+//         )}
+//       </div>
+
+//       <div className="endereco-acoes">
+//         <button className="btn-editar" onClick={() => handleEditar(endereco)}>
+//           <Edit size={16} />
+//           <span>Editar</span>
+//         </button>
+//         <button className="btn-excluir" onClick={() => handleExcluir(endereco.id)}>
+//           <Trash2 size={16} />
+//           <span>Excluir</span>
+//         </button>
+//       </div>
+//     </div>
 //   </div>
-// ) : !formularioVisivel && (
+// ))}
+
+//             </div>
+//           ) : !formularioVisivel && (
 //             <div className="sem-enderecos">
 //               <MapPin size={48} className="icone-vazio" />
 //               <p>Você ainda não tem endereços cadastrados</p>
-//               <button 
-//                 className="btn-adicionar-vazio"
-//                 onClick={() => setFormularioVisivel(true)}
-//               >
+//               <button className="btn-adicionar-vazio" onClick={() => setFormularioVisivel(true)}>
 //                 <Plus size={18} />
 //                 Adicionar primeiro endereço
 //               </button>
@@ -300,8 +316,10 @@
 
 // export default EnderecosUsuario;
 
+
+
 import React, { useEffect, useState } from 'react';
-import { Plus, Edit, Trash2, MapPin, ChevronRight } from 'lucide-react';
+import { Plus, Edit, Trash2, MapPin } from 'lucide-react';
 import { useUser } from '../UserContext';
 import './EnderecosUsuario.css';
 
@@ -311,15 +329,16 @@ const EnderecosUsuario = () => {
   const [carregando, setCarregando] = useState(true);
   const [formularioVisivel, setFormularioVisivel] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
-  // const [enderecoAtivo, setEnderecoAtivo] = useState(localStorage.getItem('enderecoAtivo') || null);
   const [enderecoAtivo, setEnderecoAtivo] = useState(() => {
-  const salvo = localStorage.getItem('enderecoAtivo');
-  return salvo ? JSON.parse(salvo) : null;
-});
+    const salvo = localStorage.getItem('enderecoAtivo');
+    return salvo ? JSON.parse(salvo) : null;
+  });
   const [formEndereco, setFormEndereco] = useState({
     nome: '', sobrenome: '', cep: '', rua: '', numero: '',
     bairro: '', cidade: '', estado: '', telefone: '', complemento: ''
   });
+  const [showModal, setShowModal] = useState(false);
+  const [enderecoParaExcluir, setEnderecoParaExcluir] = useState(null);
 
   const carregarEnderecos = async () => {
     const email = user?.email || JSON.parse(localStorage.getItem('cliente'))?.email;
@@ -417,14 +436,24 @@ const EnderecosUsuario = () => {
     setFormularioVisivel(true);
   };
 
-  const handleExcluir = async (id) => {
-    if (!window.confirm('Tem certeza que deseja excluir este endereço?')) return;
+  const handleExcluir = (id) => {
+    setEnderecoParaExcluir(id);
+    setShowModal(true);
+  };
+
+  const confirmarExclusao = async () => {
     try {
-      await fetch(`https://lojamoveis.onrender.com/api/Endereco/${id}`, { method: 'DELETE' });
+      await fetch(`https://lojamoveis.onrender.com/api/Endereco/${enderecoParaExcluir}`, { method: 'DELETE' });
       await carregarEnderecos();
+      setShowModal(false);
     } catch (err) {
       console.error('Erro ao excluir endereço:', err);
     }
+  };
+
+  const cancelarExclusao = () => {
+    setShowModal(false);
+    setEnderecoParaExcluir(null);
   };
 
   const formatarTelefone = (telefone) => {
@@ -462,22 +491,22 @@ const EnderecosUsuario = () => {
             <form className="form-endereco" onSubmit={handleSalvarEndereco}>
               <h3>{editandoId ? 'Editar Endereço' : 'Adicionar Novo Endereço'}</h3>
               
-               <div className="form-grid">
-                 <div className="form-group">
-                   <label>Nome</label>
-                   <input type="text" name="nome" value={formEndereco.nome} onChange={handleChange} required />
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Nome</label>
+                  <input type="text" name="nome" value={formEndereco.nome} onChange={handleChange} required />
                 </div>
                 
-                 <div className="form-group">
-                   <label>Sobrenome</label>
+                <div className="form-group">
+                  <label>Sobrenome</label>
                   <input type="text" name="sobrenome" value={formEndereco.sobrenome} onChange={handleChange} required />
-                 </div>
+                </div>
                 
-                 <div className="form-group">
-                   <label>CEP</label>
-                   <input 
-                     type="text" 
-                     name="cep" 
+                <div className="form-group">
+                  <label>CEP</label>
+                  <input 
+                    type="text" 
+                    name="cep" 
                     value={formEndereco.cep} 
                     onChange={handleChange} 
                     onBlur={buscarEndereco} 
@@ -550,55 +579,53 @@ const EnderecosUsuario = () => {
           {enderecos.length > 0 ? (
             <div className="lista-enderecos">
               {enderecos.map((endereco, index) => (
-  <div key={endereco.id} className="endereco-wrapper-externo">
-    
-    <div className="endereco-checkbox">
-      <label>
-        <input
-  type="checkbox"
-  checked={endereco.id === enderecoAtivo}
-  onChange={() => {
-    const novoId = endereco.id === enderecoAtivo ? null : endereco.id;
-    setEnderecoAtivo(novoId);
-    if (novoId) {
-      localStorage.setItem('enderecoAtivo', JSON.stringify(novoId)); // 🔒 Garante que salva string
-    } else {
-      localStorage.removeItem('enderecoAtivo');
-    }
-  }}
-/>
-        Usar como endereço ativo
-      </label>
-    </div>
+                <div key={endereco.id} className="endereco-wrapper-externo">
+                  <div className="endereco-checkbox">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={endereco.id === enderecoAtivo}
+                        onChange={() => {
+                          const novoId = endereco.id === enderecoAtivo ? null : endereco.id;
+                          setEnderecoAtivo(novoId);
+                          if (novoId) {
+                            localStorage.setItem('enderecoAtivo', JSON.stringify(novoId));
+                          } else {
+                            localStorage.removeItem('enderecoAtivo');
+                          }
+                        }}
+                      />
+                      Usar como endereço ativo
+                    </label>
+                  </div>
 
-    <div className={`card-endereco ${endereco.id === enderecoAtivo ? 'ativo' : ''}`}>
-      <div className="endereco-icone">
-        <MapPin size={20} />
-      </div>
-      <div className="endereco-info">
-        <h4>Endereço {index + 1}</h4>
-        <p>{endereco.textoEndereco.split(', Tel:')[0]}</p>
-        {endereco.textoEndereco.includes('Tel:') && (
-          <p className="endereco-telefone">
-            {formatarTelefone(endereco.textoEndereco.split('Tel:')[1])}
-          </p>
-        )}
-      </div>
+                  <div className={`card-endereco ${endereco.id === enderecoAtivo ? 'ativo' : ''}`}>
+                    <div className="endereco-icone">
+                      <MapPin size={20} />
+                    </div>
+                    <div className="endereco-info">
+                      <h4>Endereço {index + 1}</h4>
+                      <p>{endereco.textoEndereco.split(', Tel:')[0]}</p>
+                      {endereco.textoEndereco.includes('Tel:') && (
+                        <p className="endereco-telefone">
+                          {formatarTelefone(endereco.textoEndereco.split('Tel:')[1])}
+                        </p>
+                      )}
+                    </div>
 
-      <div className="endereco-acoes">
-        <button className="btn-editar" onClick={() => handleEditar(endereco)}>
-          <Edit size={16} />
-          <span>Editar</span>
-        </button>
-        <button className="btn-excluir" onClick={() => handleExcluir(endereco.id)}>
-          <Trash2 size={16} />
-          <span>Excluir</span>
-        </button>
-      </div>
-    </div>
-  </div>
-))}
-
+                    <div className="endereco-acoes">
+                      <button className="btn-editar" onClick={() => handleEditar(endereco)}>
+                        <Edit size={16} />
+                        <span>Editar</span>
+                      </button>
+                      <button className="btn-excluir" onClick={() => handleExcluir(endereco.id)}>
+                        <Trash2 size={16} />
+                        <span>Excluir</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : !formularioVisivel && (
             <div className="sem-enderecos">
@@ -611,6 +638,28 @@ const EnderecosUsuario = () => {
             </div>
           )}
         </>
+      )}
+
+      {/* Modal de Confirmação */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>Confirmar Exclusão</h3>
+            </div>
+            <div className="modal-body">
+              <p>Tem certeza que deseja excluir este endereço?</p>
+              <div className="modal-buttons">
+                <button className="btn-cancelar" onClick={cancelarExclusao}>
+                  Cancelar
+                </button>
+                <button className="btn-confirmar" onClick={confirmarExclusao}>
+                  Confirmar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
