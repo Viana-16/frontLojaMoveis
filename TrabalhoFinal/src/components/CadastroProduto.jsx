@@ -95,18 +95,18 @@ const CadastroProduto = () => {
     <div className="cadastro-container">
       <h2 className="cadastro-titulo">Cadastrar Produto</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data" className="cadastro-form">
-        <div className="form-group">
+        <div className="form--group">
           <label className="form-label">Nome:</label>
           <input 
             name="nome" 
             type="text" 
             onChange={handleChange} 
             required 
-            className="form-input"
+            className="form--input"
           />
         </div>
 
-        <div className="form-group">
+        <div className="form--group">
           <label className="form-label">Preço:</label>
           <input 
             name="preco" 
@@ -114,11 +114,11 @@ const CadastroProduto = () => {
             step="0.01" 
             onChange={handleChange} 
             required 
-            className="form-input"
+            className="form--input"
           />
         </div>
 
-        <div className="form-group">
+        <div className="form--group">
           <label className="form-label">Descrição:</label>
           <textarea 
             name="descricao" 
@@ -128,7 +128,7 @@ const CadastroProduto = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form--group">
           <label className="form-label">Categoria:</label>
           <select 
             name="categoria" 
@@ -152,7 +152,7 @@ const CadastroProduto = () => {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="form--group">
           <label className="form-label">Imagem principal:</label>
           <input 
             name="imagem" 
@@ -175,7 +175,7 @@ const CadastroProduto = () => {
           </div>
         )}
 
-        <div className="form-group">
+        <div className="form--group">
           <label className="form-label">Imagens extras (opcional):</label>
           <input 
             type="file" 
