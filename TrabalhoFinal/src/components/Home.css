@@ -553,26 +553,44 @@ body, .home {
 }
 
 /* ------------------- BANNER ------------------- */
-.banner {
+.banner-container {
   width: 100%;
-  height: auto;
-  margin-top: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-align: center;
-  background-image: url('/img/banner.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  margin-top: 0px; /* Ajuste este valor para descer mais ou menos */
 }
 
-.banner-img {
+.banner {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%); /* Truque para centralizar e cobrir toda a largura */
+}
+
+.banner-swiper {
   width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 8px;
+  height: 500px; /* Altura ajustável */
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-position: center;
+}
+
+/* Versão responsiva */
+@media (max-width: 1024px) {
+  .banner-swiper {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-swiper {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-swiper {
+    height: 250px;
+  }
 }
 
 /* ------------------- FILTRO DE CATEGORIAS (CIRCULARES) - ORIGINAL ------------------- */
@@ -640,7 +658,7 @@ body, .home {
 /* ------------------- ESTILOS PARA TÍTULOS ------------------- */
 .titulo-categorias {
   font-size: 1.8rem;
-  color: #333;
+  color: #D4AF37;
   font-weight: 700;
   margin: 50px 0 30px;
   padding-bottom: 15px;
@@ -933,3 +951,4 @@ span.preco{
   background-color: #072b15;
   transform: translateY(-2px);
 }
+

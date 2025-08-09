@@ -114,7 +114,7 @@ export default function Home() {
       />
 
       {/* BANNER PRINCIPAL */}
-      <section className="banner">
+      {/* <section className="banner">
         <Swiper
           modules={[Autoplay]}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -122,11 +122,33 @@ export default function Home() {
           slidesPerView={1}
           className="banner-swiper"
         >
-          <SwiperSlide><img src="/img/BannerHome1.png" alt="Banner 1" /></SwiperSlide>
+          <SwiperSlide><img src="/img/banner-home.jpg" alt="Banner 1" /></SwiperSlide>
           <SwiperSlide><img src="/img/BannerHome2.png" alt="Banner 2" /></SwiperSlide>
           <SwiperSlide><img src="/img/BannerHome3.png" alt="Banner 3" /></SwiperSlide>
         </Swiper>
-      </section>
+      </section> */}
+
+      <section className="banner-container">
+  <div className="banner">
+    <Swiper
+      modules={[Autoplay]}
+      autoplay={{ delay: 3000, disableOnInteraction: false }}
+      loop={true}
+      slidesPerView={1}
+      className="banner-swiper"
+    >
+      <SwiperSlide>
+        <img src="/img/banner-home.jpg" alt="Banner 1" className="banner-image" />
+      </SwiperSlide>
+      {/* <SwiperSlide>
+        <img src="/img/BannerHome2.png" alt="Banner 2" className="banner-image" />
+      </SwiperSlide>
+      <SwiperSlide>
+        <img src="/img/BannerHome3.png" alt="Banner 3" className="banner-image" />
+      </SwiperSlide> */}
+    </Swiper>
+  </div>
+</section>
 
       {/* CATEGORIAS */}
       <h2 className="titulo-categorias">Navegue por Categorias e Ambientes</h2>
@@ -265,7 +287,7 @@ export default function Home() {
       </section>
 
       {/* PRODUTOS - PRIMEIRA SEÇÃO */}
-      <section className="produtos">
+      {/* <section className="produtos">
         <h2>Veja Nossos Produtos</h2>
         <div className="lista-produtos">
           {produtosAleatorios.slice(0, 8).map((produto) => (
@@ -306,7 +328,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* CARD GIGANTE FINAL */}
       <section className="card-final-destaque" style={{ backgroundImage: "url('/img/BannerGigante.webp')" }}>

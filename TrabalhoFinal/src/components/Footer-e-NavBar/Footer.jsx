@@ -1,68 +1,88 @@
-  import React from 'react';
-  import {
-    FaWhatsapp,
-    FaInstagram,
-    FaFacebook,
-    FaPinterest,
-    FaCcVisa,
-    FaCcMastercard,
-    FaCcAmex,
-    FaCcPaypal,
-    FaCcApplePay
-  } from 'react-icons/fa';
-  import { MdEmail } from 'react-icons/md';
-  import './Footer.css';
+import React from 'react';
+import { FaFacebook, FaInstagram, FaWhatsapp, FaMapMarkerAlt, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faBarcode,
+  faQrcode,
+  faCreditCard 
+} from '@fortawesome/free-solid-svg-icons';
+import { 
+  faCcVisa, 
+  faCcMastercard, 
+} from '@fortawesome/free-brands-svg-icons';
+import './Footer.css';
 
-  const Footer = () => (
-    <footer className="footer">
-      {/* Siga-nos */}
-      <div className="footer-top">
-        <h3>Siga-nos</h3>
-        <div className="social-icons">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
-          <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer"><FaPinterest /></a>
-        </div>
-      </div>
-
-      {/* Seções de contato, loja e pagamento */}
+const Footer = () => {
+  return (
+    <footer className="footer-container">
       <div className="footer-content">
+        {/* Seção Contato */}
         <div className="footer-section">
-          <h4>Atendimento</h4>
-          <p><FaWhatsapp /> (11) 99999‑8888</p>
-          <p><MdEmail /> contato@Mc.com.br</p>
+          <h3 className="footer-title">Contato</h3>
+          <ul className="footer-list">
+            <li>
+              <FaMapMarkerAlt className="footer-icon" />
+              <span>Av. dos Móveis, 1234 - Minas Gerais/MG</span>
+            </li>
+            <li>
+              <FaPhone className="footer-icon" />
+              <span>(31) 9999-9999</span>
+            </li>
+            <li>
+              <FaEnvelope className="footer-icon" />
+              <span>moveisclassic@gmail.com</span>
+            </li>
+          </ul>
         </div>
+
+        {/* Seção Links Rápidos */}
         <div className="footer-section">
-          <h4>Endereço</h4>
-          <p>Av. dos Móveis, 1234</p>
-          <p>São Paulo – SP</p>
-          <p>Seg–Sex: 08h–18h</p>
+          <h3 className="footer-title">Links Rápidos</h3>
+          <ul className="footer-list">
+            <li><a href="/sobre">Sobre Nós</a></li>
+            <li><a href="/">Nossos Produtos</a></li>
+            <li><a href="/atendimento">Fale Conosco</a></li>
+            {/* <li><a href="/politica-de-privacidade">Política de Privacidade</a></li> */}
+          </ul>
         </div>
+
+        {/* Seção Redes Sociais */}
         <div className="footer-section">
-          <h4>Formas de Pagamento</h4>
-          <div className="payment-icons">
-            <FaCcVisa title="Visa" />
-            <FaCcMastercard title="Mastercard" />
-            <FaCcAmex title="American Express" />
-            <FaCcPaypal title="PayPal" />
-            <FaCcApplePay title="Apple Pay" />
+          <h3 className="footer-title">Redes Sociais</h3>
+          <div className="social-icons">
+            <a href="https://facebook.com" aria-label="Facebook">
+              <FaFacebook className="social-icon" />
+            </a>
+            <a href="https://instagram.com" aria-label="Instagram">
+              <FaInstagram className="social-icon" />
+            </a>
+            <a href="https://wa.me/5511999999999" aria-label="WhatsApp">
+              <FaWhatsapp className="social-icon" />
+            </a>
           </div>
+          
+          <div className="payment-methods">
+        <h4>Formas de Pagamento</h4>
+        <div className="payment-icons">
+          <FontAwesomeIcon icon={faCcVisa} className="payment-icon" title="Visa" />
+          <FontAwesomeIcon icon={faCcMastercard} className="payment-icon" title="Mastercard" />
+          <FontAwesomeIcon icon={faBarcode} className="payment-icon" title="Boleto" />
+          <FontAwesomeIcon icon={faQrcode} className="payment-icon" title="Pix" />
         </div>
-        <div className="footer-section newsletter">
-          <h4>Email</h4>
-          <p>Receba ofertas exclusivas!</p>
-          <form onSubmit={e => e.preventDefault()}>
-            <input type="email" placeholder="Seu e‑mail" />
-            <button type="submit">OK</button>
-          </form>
+        <p className="payment-text">
+          <FontAwesomeIcon icon={faCreditCard} /> Parcelamos em até 12x sem juros
+        </p>
+      </div>
+
         </div>
       </div>
 
-      {/* Rodapé inferior */}
       <div className="footer-bottom">
-        © {new Date().getFullYear()} Mc. Todos os direitos reservados.
+        <p>&copy; {new Date().getFullYear()} Móveis Clássic - Todos os direitos reservados</p>
+        <p>CNPJ: 12.345.678/0001-99</p>
       </div>
     </footer>
   );
+};
 
-  export default Footer;
+export default Footer;

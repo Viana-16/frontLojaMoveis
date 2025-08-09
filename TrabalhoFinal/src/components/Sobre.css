@@ -1,110 +1,357 @@
-.pagina-sobre {
-  padding: 60px 20px 40px;
-  background-color: #f3f6f9;
-  min-height: 100vh;
-  font-family: "Segoe UI", sans-serif;
+/* Variáveis de Cor */
+:root {
+  --verde-escuro: #004632;
+  --verde-medio: #2E8B57;
+  --verde-claro: #E8F5E9;
+  --dourado: #D4AF37;
+  --dourado-claro: #F0E6C8;
+  --bege: #F5F0E6;
+}
+
+/* Estilos Gerais */
+.sobre-nos-container {
+  font-family: 'Playfair Display', serif;
   color: #333;
-}
-
-/* Título com animação */
-.titulo-container {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.titulo-animado {
-  font-size: 3rem;
-  color: #003366;
-  position: relative;
-  animation: fadeSlide 1s ease-out forwards;
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-/* Animação de título */
-@keyframes fadeSlide {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Cards */
-.cards-sobre {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.card-sobre {
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.card-sobre h2 {
-  margin-bottom: 12px;
-  color: #003366;
-  font-size: 1.4rem;
-}
-
-.card-sobre p,
-.card-sobre ul {
-  font-size: 1rem;
   line-height: 1.6;
-  color: #444;
+  background-color: white;
 }
 
-.card-sobre ul {
-  padding-left: 20px;
-  list-style-type: disc;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-/* Animações */
-.animar {
-  animation: aparecer 0.6s ease-out forwards;
+/* Hero Section */
+.sobre-hero {
+  position: relative;
+  height: 60vh;
+  background: linear-gradient(rgba(0, 70, 50, 0.7), rgba(0, 70, 50, 0.7)), 
+              url('/img/banner-sobre.jpg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
 }
 
-.animar:nth-child(1) { animation-delay: 0.1s; }
-.animar:nth-child(2) { animation-delay: 0.2s; }
-.animar:nth-child(3) { animation-delay: 0.3s; }
-.animar:nth-child(4) { animation-delay: 0.4s; }
-.animar:nth-child(5) { animation-delay: 0.5s; }
-.animar:nth-child(6) { animation-delay: 0.6s; }
-
-@keyframes aparecer {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero-content {
+  position: relative;
+  z-index: 1;
 }
 
-/* Botões */
-.botoes-sobre {
-  margin-top: 50px;
+.hero-content h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: var(--dourado);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-style: italic;
+  border-top: 2px solid var(--dourado);
+  border-bottom: 2px solid var(--dourado);
+  display: inline-block;
+  padding: 0.5rem 0;
+  color: white;
+}
+
+/* Nossa História */
+.nossa-historia {
+  padding: 5rem 0;
+  background-color: var(--verde-claro);
+}
+
+.historia-content {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.historia-texto {
+  flex: 1;
+}
+
+.historia-texto h2 {
+  font-size: 2.5rem;
+  color: var(--verde-escuro);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.historia-texto h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100px;
+  height: 3px;
+  background: var(--dourado);
+}
+
+.historia-texto p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.historia-imagem {
+  flex: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 3px solid var(--dourado);
+}
+
+.historia-imagem img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.historia-imagem:hover img {
+  transform: scale(1.03);
+}
+
+/* Diferenciais */
+.diferenciais {
+  padding: 5rem 0;
+  background: white;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--verde-escuro);
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: var(--dourado);
+}
+
+.diferenciais-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.diferencial-card {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: white;
+  border: 1px solid var(--dourado-claro);
+}
+
+.diferencial-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 70, 50, 0.1);
+  border-color: var(--dourado);
+}
+
+.diferencial-icon {
+  font-size: 3rem;
+  color: var(--dourado);
+  margin-bottom: 1.5rem;
+}
+
+.diferencial-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--verde-escuro);
+}
+
+/* Valores */
+.valores {
+  padding: 5rem 0;
+  background-color: var(--verde-claro);
+}
+
+.valores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.valor-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-top: 4px solid var(--dourado);
+}
+
+.valor-card h3 {
+  font-size: 1.5rem;
+  color: var(--verde-escuro);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--dourado-claro);
+}
+
+.valor-card ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.valor-card ul li {
+  margin-bottom: 0.8rem;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.valor-card ul li::before {
+  content: '•';
+  color: var(--dourado);
+  font-size: 1.5rem;
+  position: absolute;
+  left: 0;
+  top: -3px;
+}
+
+/* Equipe */
+.equipe {
+  padding: 5rem 0;
+  background: white;
+}
+
+.equipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.membro {
+  text-align: center;
+}
+
+.membro img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1.5rem;
+  border: 5px solid var(--dourado-claro);
+  transition: all 0.3s ease;
+}
+
+.membro img:hover {
+  transform: scale(1.05);
+  border-color: var(--dourado);
+}
+
+.membro h3 {
+  font-size: 1.3rem;
+  color: var(--verde-escuro);
+  margin-bottom: 0.5rem;
+}
+
+.membro p {
+  color: #777;
+  font-style: italic;
+}
+
+/* CTA */
+.cta-sobre {
+  padding: 4rem 0;
+  background: var(--verde-escuro);
+  color: white;
+  text-align: center;
+}
+
+.cta-sobre h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.cta-sobre p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
-.botoes-sobre button {
-  background-color: #003366;
+.btn-primary, .btn-secondary {
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--dourado);
+  color: var(--verde-escuro);
+}
+
+.btn-primary:hover {
+  background: #C19A0B;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+.btn-secondary {
+  background: transparent;
   color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  border: 2px solid var(--dourado);
 }
 
-.botoes-sobre button:hover {
-  background-color: #00509e;
+.btn-secondary:hover {
+  background: rgba(212, 175, 55, 0.1);
+  transform: translateY(-3px);
 }
 
+/* Responsivo */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .historia-content {
+    flex-direction: column;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-primary, .btn-secondary {
+    width: 80%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .diferenciais-grid, .valores-grid, .equipe-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}
