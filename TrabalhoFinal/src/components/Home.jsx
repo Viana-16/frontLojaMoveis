@@ -67,19 +67,21 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://lojamoveis.onrender.com/api/Produto")
-      .then((res) => res.json())
-      .then((data) => {
-        const produtosComAvaliacao = data.map(produto => ({
-          ...produto,
-          avaliacao: produto.avaliacao || (3 + Math.random() * 2).toFixed(1)
-        }));
-        setProdutos(produtosComAvaliacao);
-        const embaralhado = [...produtosComAvaliacao].sort(() => Math.random() - 0.5);
-        setProdutosAleatorios(embaralhado);
-      })
-      .catch((err) => console.error("Erro ao buscar produtos:", err));
-  }, []);
+  fetch("https://lojamoveis.onrender.com/api/Produto")
+    .then((res) => res.json())
+    .then((data) => {
+      const produtosComAvaliacao = data.map(produto => ({
+        ...produto,
+        avaliacao: produto.avaliacao || (3 + Math.random() * 2).toFixed(1)
+      }));
+      
+      // Ordena por algum critério fixo (como ID ou nome) para manter a ordem consistente
+      const produtosOrdenados = [...produtosComAvaliacao].sort((a, b) => a.id - b.id);
+      
+      setProdutos(produtosOrdenados);
+ })
+    .catch((err) => console.error("Erro ao buscar produtos:", err));
+}, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -113,21 +115,6 @@ export default function Home() {
         onClose={() => setShowModal(false)} 
       />
 
-      {/* BANNER PRINCIPAL */}
-      {/* <section className="banner">
-        <Swiper
-          modules={[Autoplay]}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
-          loop={true}
-          slidesPerView={1}
-          className="banner-swiper"
-        >
-          <SwiperSlide><img src="/img/banner-home.jpg" alt="Banner 1" /></SwiperSlide>
-          <SwiperSlide><img src="/img/BannerHome2.png" alt="Banner 2" /></SwiperSlide>
-          <SwiperSlide><img src="/img/BannerHome3.png" alt="Banner 3" /></SwiperSlide>
-        </Swiper>
-      </section> */}
-
       <section className="banner-container">
   <div className="banner">
     <Swiper
@@ -140,12 +127,6 @@ export default function Home() {
       <SwiperSlide>
         <img src="/img/banner-home.jpg" alt="Banner 1" className="banner-image" />
       </SwiperSlide>
-      {/* <SwiperSlide>
-        <img src="/img/BannerHome2.png" alt="Banner 2" className="banner-image" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <img src="/img/BannerHome3.png" alt="Banner 3" className="banner-image" />
-      </SwiperSlide> */}
     </Swiper>
   </div>
 </section>
@@ -157,7 +138,7 @@ export default function Home() {
           { nome: "Guarda-Roupas", imagem: "/img/guardaroupa.avif", rota: "/guarda-roupas" },
           { nome: "Sala de Estar", imagem: "/img/saladeestar.avif", rota: "/sala-de-estar" },
           { nome: "Sofás", imagem: "/img/sofas.avif", rota: "/sofas" },
-          { nome: "Cozinha", imagem: "/img/cozinha.avif", rota: "/cozinha" },
+          { nome: "Cozinha", imagem: "/img/cozinha.avif", rota: "/cozinhas" },
           { nome: "Banheiro", imagem: "/img/banheiro.avif", rota: "/banheiro" },
           { nome: "Escritorio", imagem: "/img/escritorio.avif", rota: "/escritorio" },
           { nome: "Painéis", imagem: "/img/paineis.avif", rota: "/paineis" },
@@ -176,16 +157,16 @@ export default function Home() {
         ))}
       </section>
 
-      {/* PRODUTOS - PRIMEIRA SEÇÃO */}
-      <section className="produtos">
-        <h2>Veja Nossos Produtos</h2>
-        <div className="lista-produtos">
-          {produtosAleatorios.slice(0, 8).map((produto) => (
-            <div 
-              className="produto-card" 
-              key={produto.id}
-              onClick={() => handleCardClick(produto.id)}
-            >
+      {/* PRIMEIRA METADE DOS PRODUTOS */}
+<section className="produtos">
+  <h2>Nossos Destaques</h2>
+  <div className="lista-produtos">
+    {produtos.slice(0, Math.ceil(produtos.length / 2)).map((produto) => (
+      <div 
+        className="produto-card" 
+        key={produto.id}
+        onClick={() => handleCardClick(produto.id)}
+      >
               <div className="produto-card-header">
                 <img 
                   src={produto.imagemUrl} 
@@ -242,16 +223,16 @@ export default function Home() {
         ))}
       </section>
 
-      {/* PRODUTOS - PRIMEIRA SEÇÃO */}
+      {/* PRODUTOS - Segunda SEÇÃO */}
       <section className="produtos">
-        <h2>Veja Nossos Produtos</h2>
-        <div className="lista-produtos">
-          {produtosAleatorios.slice(0, 8).map((produto) => (
-            <div 
-              className="produto-card" 
-              key={produto.id}
-              onClick={() => handleCardClick(produto.id)}
-            >
+  <h2>Mais Produtos</h2>
+  <div className="lista-produtos">
+    {produtos.slice(Math.ceil(produtos.length / 2)).map((produto) => (
+      <div 
+        className="produto-card" 
+        key={produto.id}
+        onClick={() => handleCardClick(produto.id)}
+      >
               <div className="produto-card-header">
                 <img 
                   src={produto.imagemUrl} 
@@ -285,50 +266,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* PRODUTOS - PRIMEIRA SEÇÃO */}
-      {/* <section className="produtos">
-        <h2>Veja Nossos Produtos</h2>
-        <div className="lista-produtos">
-          {produtosAleatorios.slice(0, 8).map((produto) => (
-            <div 
-              className="produto-card" 
-              key={produto.id}
-              onClick={() => handleCardClick(produto.id)}
-            >
-              <div className="produto-card-header">
-                <img 
-                  src={produto.imagemUrl} 
-                  alt={produto.nome} 
-                  className="produto-imagem"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCardClick(produto.id);
-                  }}
-                />
-                <button
-                  className="icone-carrinho-topo"
-                  onClick={(e) => handleAddToCart(produto, e)}
-                >
-                  <FontAwesomeIcon icon={faShoppingCart} />
-                </button>
-                <div className="produto-overlay">
-                  
-                </div>
-              </div>
-              <div className="produto-card-body">
-                <div className="info-simples">
-                  <h3>{produto.nome}</h3>
-                  <div className="rating-price-container">
-                    <StarRating rating={parseFloat(produto.avaliacao)} />
-                    <span className="preco">R$ {produto.preco}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section> */}
 
       {/* CARD GIGANTE FINAL */}
       <section className="card-final-destaque" style={{ backgroundImage: "url('/img/BannerGigante.webp')" }}>

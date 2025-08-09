@@ -97,13 +97,13 @@ const Navbar = () => {
                 <NavLink to="/banheiro">Banheiro</NavLink>
                 <NavLink to="/escritorio">Escritorios</NavLink>
                 <NavLink to="/paineis">Paineis</NavLink>
-                <NavLink to="/estantes">Estantes</NavLink>
+                <NavLink to="/portaejanelas">Portas e Janelas</NavLink>
                 <NavLink to="/camas">Camas</NavLink>
                 <NavLink to="/lavanderia">Lavanderia</NavLink>
               </div>
             </div>
-            <NavLink to="/colecoes">Coleções</NavLink>
             <NavLink to="/promocoes">Promoções</NavLink>
+            <NavLink to="/sobre">Sobre</NavLink>
             <NavLink to="/atendimento">Contato</NavLink>
           </div>
 
@@ -117,59 +117,6 @@ const Navbar = () => {
               <ShoppingCart size={20} />
               {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}
             </NavLink>
-            
-            {/* {cliente ? (
-              <div 
-                className="user-container"
-                onMouseEnter={handleMouseEnterDropdown}
-                onMouseLeave={handleMouseLeaveDropdown}
-              >
-                <button 
-                  className="user-icon-btn"
-                  onClick={() => setShowUserDropdown(!showUserDropdown)}
-                >
-                  <User size={20} />
-                </button>
-                
-                {showUserDropdown && (
-                  <div 
-                    className="user-dropdown"
-                    onMouseEnter={handleMouseEnterDropdown}
-                    onMouseLeave={handleMouseLeaveDropdown}
-                  >
-                    <div className="user-info">
-                      <p className="user-greeting">Olá, {cliente.nome || cliente.email}</p>
-                      {cliente.email && <p className="user-email">{cliente.email}</p>}
-                    </div>
-                    <div className="dropdown-divider"></div>
-                    <NavLink 
-                      to="/meuperfil" 
-                      className="dropdown-item"
-                      onClick={() => setShowUserDropdown(false)}
-                    >
-                      Minha Conta
-                    </NavLink>
-                    <NavLink 
-                      to="/meuperfil" 
-                      className="dropdown-item"
-                      onClick={() => setShowUserDropdown(false)}
-                    >
-                      Meus Pedidos
-                    </NavLink>
-                    <button 
-                      className="dropdown-item logout-btn"
-                      onClick={handleLogout}
-                    >
-                      Sair
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <NavLink to="/conta" className="login-text-btn">
-                Entrar
-              </NavLink>
-            )} */}
 
             {cliente ? (
   <div 
@@ -211,7 +158,7 @@ const Navbar = () => {
               className="dropdown-item"
               onClick={() => setShowUserDropdown(false)}
             >
-              Editar Produtos
+              Editar Pedidos
             </NavLink>
           </>
         ) : (

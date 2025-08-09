@@ -21,7 +21,6 @@ import Cozinhas from './components/PaginasCategoria/Cozinhas';
 import Banheiro from './components/PaginasCategoria/Banheiro'
 import Escritorio from './components/PaginasCategoria/Escritorio';
 import Paineis from './components/PaginasCategoria/Paineis';
-import Estantes from './components/PaginasCategoria/Estantes';
 import Camas from './components/PaginasCategoria/Camas';
 import Lavanderia from './components/PaginasCategoria/Lavanderia';
 import Promocoes from './components/PaginasCategoria/Promocoes';
@@ -33,6 +32,7 @@ import Pagamento from './components/Pagamentos/Pagamento';
 import ProdutoDetalhes from './components/ProdutoDetalhes';
 import PedidosAdmin from './components/PedidosAdmin';
 import ScrollToTop from './components/ScrollToTop';
+import PortasJanelas from './components/PaginasCategoria/PortasJanelas';
 
 
 
@@ -67,11 +67,12 @@ const App = () => {
         <Route path="/banheiro" element={<Banheiro />} /> 
         <Route path="/escritorio" element={<Escritorio />} /> 
         <Route path="/paineis" element={<Paineis />} /> 
-        <Route path="/estantes" element={<Estantes />} /> 
         <Route path="/camas" element={<Camas />} /> 
         <Route path="/lavanderia" element={<Lavanderia />} /> 
         <Route path="/promocoes" element={<Promocoes />} />
         <Route path="/produto/:id" element={<ProdutoDetalhes />} />
+        <Route path="/portaejanelas" element={<PortasJanelas />} />
+
 
 
         <Route path="/buscar" element={<Buscar />} />

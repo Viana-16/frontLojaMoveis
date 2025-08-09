@@ -952,3 +952,38 @@ span.preco{
   transform: translateY(-2px);
 }
 
+/* Estilo para telas menores */
+@media (max-width: 768px) {
+  .grid-categorias {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 10px 0;
+    scroll-behavior: smooth;
+  }
+
+  .grid-categorias::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .grid-categorias::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 3px;
+  }
+
+  .card-categoria-grid {
+    min-width: 120px;
+    flex: 0 0 auto;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+    border-radius: 8px;
+  }
+}

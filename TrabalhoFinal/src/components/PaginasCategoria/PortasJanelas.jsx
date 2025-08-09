@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../components/UserContext";
 import { useCart } from "../../components/CartContext"; // Caminho correto
 
-const Estantes = () => {
+const PortasJanelas = () => {
   const [produtos, setProdutos] = useState([]);
   const navigate = useNavigate();
   const { user } = useUser(); // pega o usuário logado
@@ -14,7 +14,7 @@ const Estantes = () => {
       .then((res) => res.json())
       .then((data) => {
         const produtosFiltrados = data.filter(
-          (p) => p.categoria.toLowerCase() === "estantes"
+          (p) => p.categoria.toLowerCase() === "portaejanelas"
         );
         setProdutos(produtosFiltrados);
       })
@@ -34,7 +34,7 @@ const Estantes = () => {
 
   return (
     <div className="categoria-pagina">
-      <h2>Categoria: Estantes</h2>
+      <h2>Categoria: Portas e Janelas</h2>
       <div className="lista-produtos">
         {produtos.map((produto) => (
           <div className="produto-card" key={produto.id}>
@@ -66,4 +66,4 @@ const Estantes = () => {
   );
 };
 
-export default Estantes;
+export default PortasJanelas;
