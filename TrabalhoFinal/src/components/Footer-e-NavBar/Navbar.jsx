@@ -212,7 +212,7 @@ const Navbar = () => {
         {showMobileMenu && (
           <div className="mobile-menu">
             <div className="mobile-links">
-              <NavLink to="/sobre" onClick={() => setShowMobileMenu(false)}>Sobre Nós</NavLink>
+              <NavLink to="/" onClick={() => setShowMobileMenu(false)}>Home</NavLink>
               <div className="dropdown">
               <button className="dropbtn">
                 Categorias <ChevronDown size={16} />
@@ -230,8 +230,8 @@ const Navbar = () => {
                 <NavLink to="/lavanderia">Lavanderia</NavLink>
               </div>
             </div>
-              <NavLink to="/colecoes" onClick={() => setShowMobileMenu(false)}>Coleções</NavLink>
               <NavLink to="/promocoes" onClick={() => setShowMobileMenu(false)}>Promoções</NavLink>
+              <NavLink to="/sobre" onClick={() => setShowMobileMenu(false)}>Sobre Nós</NavLink>
               <NavLink to="/atendimento" onClick={() => setShowMobileMenu(false)}>Contato</NavLink>
               
               {/* Seção do usuário no mobile */}
