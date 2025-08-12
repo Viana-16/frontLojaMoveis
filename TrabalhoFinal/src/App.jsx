@@ -24,7 +24,6 @@ import Paineis from './components/PaginasCategoria/Paineis';
 import Camas from './components/PaginasCategoria/Camas';
 import Lavanderia from './components/PaginasCategoria/Lavanderia';
 import Promocoes from './components/PaginasCategoria/Promocoes';
-import Buscar from './components/Barra-Pesquisa/Buscar';
 import RedefinirSenha from './components/Redefinir-Senhas/RedefinirSenha';
 import EsqueciSenha from './components/Redefinir-Senhas/EsqueciSenha';
 import MeuPerfil from './components/MeuPerfil/MeuPerfi';
@@ -33,6 +32,7 @@ import ProdutoDetalhes from './components/ProdutoDetalhes';
 import PedidosAdmin from './components/PedidosAdmin';
 import ScrollToTop from './components/ScrollToTop';
 import PortasJanelas from './components/PaginasCategoria/PortasJanelas';
+import BuscaProdutos from './components/Barra-Pesquisa/BuscaProdutos';
 
 
 
@@ -75,9 +75,9 @@ const App = () => {
 
 
 
-        <Route path="/buscar" element={<Buscar />} />
         <Route path="/redefinir-senha/:token" element={<RedefinirSenha />} />
         <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+        <Route path="/busca" element={<BuscaProdutos />} />
 
 
 

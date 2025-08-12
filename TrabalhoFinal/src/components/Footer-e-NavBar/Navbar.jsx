@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, ChevronDown, Menu } from 'lucide-react';
 import { Truck, CreditCard, Shield, Package } from 'lucide-react';
@@ -12,6 +12,10 @@ const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [dropdownTimeout, setDropdownTimeout] = useState(null);
+
+   const [showSearchInput, setShowSearchInput] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const searchInputRef = useRef(null);
   
   const navigate = useNavigate();
    const [mensagemAtual, setMensagemAtual] = useState(0);
@@ -24,6 +28,21 @@ const Navbar = () => {
     { texto: 'Entrega rápida', icone: <Package size={18} /> }
   ];
 
+
+  useEffect(() => {
+    if (showSearchInput && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [showSearchInput]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/busca?query=${encodeURIComponent(searchTerm.trim())}`);
+      setShowSearchInput(false);
+      setSearchTerm('');
+    }
+  };
 
   useEffect(() => {
     const intervalo = setInterval(
@@ -56,13 +75,7 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Faixa promocional superior */}
-      {/* <div className="mensagem-topo">
-        <div className="mensagem-container">
-          {mensagens[mensagemAtual]}
-        </div>
-      </div> */}
-
+      
       <div className="mensagem-topo">
       <div className="mensagem-container">
         <div className="mensagem-item">
@@ -84,7 +97,7 @@ const Navbar = () => {
 
           {/* Menu desktop */}
           <div className="nav-links desktop-only">
-             <NavLink to="/lancamentos">Lançamentos</NavLink>
+            <NavLink to="/">Home</NavLink>
             <div className="dropdown">
               <button className="dropbtn">
                 Categorias <ChevronDown size={16} />
@@ -93,7 +106,7 @@ const Navbar = () => {
                 <NavLink to="/guarda-roupas">Guarda-Roupa</NavLink>
                 <NavLink to="/sala-de-estar">Sala de Estar</NavLink>
                 <NavLink to="/sofas">Sofas</NavLink>
-                <NavLink to="/cozinha">Cozinha</NavLink>
+                <NavLink to="/cozinhas">Cozinha</NavLink>
                 <NavLink to="/banheiro">Banheiro</NavLink>
                 <NavLink to="/escritorio">Escritorios</NavLink>
                 <NavLink to="/paineis">Paineis</NavLink>
@@ -102,16 +115,34 @@ const Navbar = () => {
                 <NavLink to="/lavanderia">Lavanderia</NavLink>
               </div>
             </div>
+            <NavLink to="/lancamentos">Lançamentos</NavLink>
             <NavLink to="/promocoes">Promoções</NavLink>
             <NavLink to="/sobre">Sobre</NavLink>
-            <NavLink to="/atendimento">Contato</NavLink>
           </div>
 
           {/* Ícones de ação */}
           <div className="nav-actions">
-            <div className="search-container">
-              <Search className="search-icon" size={20} />
-            </div>
+        <div className="search-container">
+          {showSearchInput ? (
+            <form onSubmit={handleSearchSubmit}>
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Buscar móveis..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onBlur={() => setShowSearchInput(false)} // fecha ao perder foco
+              />
+            </form>
+          ) : (
+            <Search 
+              className="search-icon" 
+              size={20} 
+              style={{ cursor: 'pointer' }}
+              onClick={() => setShowSearchInput(true)} 
+            />
+          )}
+        </div>
             
             <NavLink to="/carrinho" className="cart-icon">
               <ShoppingCart size={20} />
@@ -221,7 +252,7 @@ const Navbar = () => {
                 <NavLink to="/guarda-roupas">Guarda-Roupa</NavLink>
                 <NavLink to="/sala-de-estar">Sala de Estar</NavLink>
                 <NavLink to="/sofas">Sofas</NavLink>
-                <NavLink to="/cozinha">Cozinha</NavLink>
+                <NavLink to="/cozinhas">Cozinha</NavLink>
                 <NavLink to="/banheiro">Banheiro</NavLink>
                 <NavLink to="/escritorio">Escritorios</NavLink>
                 <NavLink to="/paineis">Paineis</NavLink>

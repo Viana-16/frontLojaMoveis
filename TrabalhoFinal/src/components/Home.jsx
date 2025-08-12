@@ -3,11 +3,18 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay } from "swiper/modules";
 import { Link, useNavigate } from "react-router-dom";
+import "./PaginasCategoriaCSS/Lancamentos.css";
 import React, { useEffect, useState } from "react";
-import "./Home.css";
 import { useCart } from "../components/CartContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faStar as faStarSolid, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faShoppingCart, 
+  faStar as faStarSolid, 
+  faCheckCircle,
+  faExclamationCircle,
+  faSignInAlt,
+  faTimes
+} from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 
 // Componente de Avaliação por Estrelas
@@ -31,6 +38,7 @@ const StarRating = ({ rating }) => {
     </div>
   );
 };
+
 
 // Componente de Modal de Confirmação
 const CartModal = ({ show, produto, onClose }) => {
@@ -57,31 +65,88 @@ const CartModal = ({ show, produto, onClose }) => {
   );
 };
 
+// Componente de Modal de Login Necessário
+const LoginRequiredModal = ({ show, onClose, onLogin }) => {
+  if (!show) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="login-required-modal">
+        <button className="close-modal" onClick={onClose}>
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
+        <div className="modal-icon">
+          <FontAwesomeIcon icon={faExclamationCircle} />
+        </div>
+        <h3>Atenção</h3>
+        <p>Você precisa estar logado para adicionar itens ao carrinho.</p>
+        <div className="modal-buttons">
+          <button className="login-buttooon" onClick={onLogin}>
+            <FontAwesomeIcon icon={faSignInAlt} /> Fazer Login
+          </button>
+          <button className="continue-button" onClick={onClose}>
+            Continuar Navegando
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
-  const [produtosAleatorios, setProdutosAleatorios] = useState([]);
   const [mostrarSeta, setMostrarSeta] = useState(false);
   const { addToCart } = useCart();
   const [showModal, setShowModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [produtoAdicionado, setProdutoAdicionado] = useState(null);
   const navigate = useNavigate();
 
+  const cliente = JSON.parse(localStorage.getItem("cliente"));
+
   useEffect(() => {
-  fetch("https://lojamoveis.onrender.com/api/Produto")
-    .then((res) => res.json())
-    .then((data) => {
-      const produtosComAvaliacao = data.map(produto => ({
-        ...produto,
-        avaliacao: produto.avaliacao || (3 + Math.random() * 2).toFixed(1)
-      }));
-      
-      // Ordena por algum critério fixo (como ID ou nome) para manter a ordem consistente
-      const produtosOrdenados = [...produtosComAvaliacao].sort((a, b) => a.id - b.id);
-      
-      setProdutos(produtosOrdenados);
- })
-    .catch((err) => console.error("Erro ao buscar produtos:", err));
-}, []);
+    const fetchProdutosComAvaliacoes = async () => {
+      try {
+        const resProdutos = await fetch("https://lojamoveis.onrender.com/api/Produto");
+        const produtosData = await resProdutos.json();
+
+        const produtosComAvaliacao = await Promise.all(
+          produtosData.map(async (produto) => {
+            try {
+              const resAval = await fetch(`https://lojamoveis.onrender.com/api/Avaliacao/produto/${produto.id}`);
+              const avaliacoes = await resAval.json();
+
+              let media = 0;
+              if (avaliacoes.length > 0) {
+                const soma = avaliacoes.reduce((total, av) => total + av.nota, 0);
+                media = soma / avaliacoes.length;
+              }
+
+              return {
+                ...produto,
+                avaliacao: media
+              };
+            } catch (err) {
+              console.error(`Erro ao buscar avaliações do produto ${produto.id}:`, err);
+              return {
+                ...produto,
+                avaliacao: 0
+              };
+            }
+          })
+        );
+
+        const produtosOrdenados = [...produtosComAvaliacao].sort((a, b) => a.id - b.id);
+        setProdutos(produtosOrdenados);
+      } catch (err) {
+        console.error("Erro ao buscar produtos:", err);
+      }
+    };
+
+    fetchProdutosComAvaliacoes();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,11 +165,30 @@ export default function Home() {
 
   const handleAddToCart = (produto, e) => {
     e.stopPropagation();
+    
+    if (!cliente) {
+      setShowLoginModal(true);
+      return;
+    }
+
     addToCart(produto);
     setProdutoAdicionado(produto);
     setShowModal(true);
-    setTimeout(() => setShowModal(false), 5000); // Fecha automaticamente após 5 segundos
+    setTimeout(() => setShowModal(false), 5000);
   };
+
+  const handleLoginRedirect = () => {
+    setShowLoginModal(false);
+    navigate("/conta");
+  };
+
+  // Função para formatar valores monetários
+const formatarMoeda = (valor) => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(valor);
+};
 
   return (
     <div className="home">
@@ -115,23 +199,31 @@ export default function Home() {
         onClose={() => setShowModal(false)} 
       />
 
-      <section className="banner-container">
-  <div className="banner">
-    <Swiper
-      modules={[Autoplay]}
-      autoplay={{ delay: 3000, disableOnInteraction: false }}
-      loop={true}
-      slidesPerView={1}
-      className="banner-swiper"
-    >
-      <SwiperSlide>
-        <img src="/img/banner-home.jpg" alt="Banner 1" className="banner-image" />
-      </SwiperSlide>
-    </Swiper>
-  </div>
-</section>
+      {/* Modal de Login Necessário */}
+      <LoginRequiredModal
+        show={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onLogin={handleLoginRedirect}
+      />
 
-      {/* CATEGORIAS */}
+      {/* Banner */}
+      <section className="banner-container">
+        <div className="banner">
+          <Swiper
+            modules={[Autoplay]}
+            autoplay={{ delay: 3000, disableOnInteraction: false }}
+            loop={true}
+            slidesPerView={1}
+            className="banner-swiper"
+          >
+            <SwiperSlide>
+              <img src="/img/banner-home.jpg" alt="Banner 1" className="banner-image" />
+            </SwiperSlide>
+          </Swiper>
+        </div>
+      </section>
+
+      {/* Categorias */}
       <h2 className="titulo-categorias">Navegue por Categorias e Ambientes</h2>
       <section className="grid-categorias">
         {[
@@ -157,16 +249,16 @@ export default function Home() {
         ))}
       </section>
 
-      {/* PRIMEIRA METADE DOS PRODUTOS */}
-<section className="produtos">
-  <h2>Nossos Destaques</h2>
-  <div className="lista-produtos">
-    {produtos.slice(0, Math.ceil(produtos.length / 2)).map((produto) => (
-      <div 
-        className="produto-card" 
-        key={produto.id}
-        onClick={() => handleCardClick(produto.id)}
-      >
+      {/* Primeira metade dos produtos */}
+      <section className="produtos">
+        <h2>Nossos Produtos</h2>
+        <div className="lista-produtos">
+          {produtos.slice(0, Math.ceil(produtos.length / 2)).map((produto) => (
+            <div 
+              className="produto-card" 
+              key={produto.id}
+              onClick={() => handleCardClick(produto.id)}
+            >
               <div className="produto-card-header">
                 <img 
                   src={produto.imagemUrl} 
@@ -183,16 +275,13 @@ export default function Home() {
                 >
                   <FontAwesomeIcon icon={faShoppingCart} />
                 </button>
-                <div className="produto-overlay">
-                
-                </div>
               </div>
               <div className="produto-card-body">
                 <div className="info-simples">
                   <h3>{produto.nome}</h3>
                   <div className="rating-price-container">
-                    <StarRating rating={parseFloat(produto.avaliacao)} />
-                    <span className="preco">R$ {produto.preco}</span>
+                    <StarRating rating={produto.avaliacao} />
+                    <span className="preco">{formatarMoeda(produto.preco)}</span>
                   </div>
                 </div>
               </div>
@@ -201,7 +290,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CARDS PROMOCIONAIS GIGANTES */}
+      {/* Cards promocionais */}
       <section className="cards-gigantes-lado-a-lado">
         {[
           { imagem: "/img/MoveisMcategoria.png", link: "/sobre" },
@@ -213,26 +302,20 @@ export default function Home() {
             key={index}
             className="card-gigante"
             style={{ backgroundImage: `url('${card.imagem}')` }}
-          >
-            <div className="overlay"></div>
-            <div className="conteudo-card">
-              <h2>{card.titulo}</h2>
-              <p>{card.texto}</p>
-            </div>
-          </Link>
+          />
         ))}
       </section>
 
-      {/* PRODUTOS - Segunda SEÇÃO */}
+      {/* Segunda metade dos produtos */}
       <section className="produtos">
-  <h2>Mais Produtos</h2>
-  <div className="lista-produtos">
-    {produtos.slice(Math.ceil(produtos.length / 2)).map((produto) => (
-      <div 
-        className="produto-card" 
-        key={produto.id}
-        onClick={() => handleCardClick(produto.id)}
-      >
+        <h2>Mais Produtos</h2>
+        <div className="lista-produtos">
+          {produtos.slice(Math.ceil(produtos.length / 2)).map((produto) => (
+            <div 
+              className="produto-card" 
+              key={produto.id}
+              onClick={() => handleCardClick(produto.id)}
+            >
               <div className="produto-card-header">
                 <img 
                   src={produto.imagemUrl} 
@@ -249,16 +332,13 @@ export default function Home() {
                 >
                   <FontAwesomeIcon icon={faShoppingCart} />
                 </button>
-                <div className="produto-overlay">
-                  
-                </div>
               </div>
               <div className="produto-card-body">
                 <div className="info-simples">
                   <h3>{produto.nome}</h3>
                   <div className="rating-price-container">
-                    <StarRating rating={parseFloat(produto.avaliacao)} />
-                    <span className="preco">R$ {produto.preco}</span>
+                    <StarRating rating={produto.avaliacao} />
+                    <span className="preco">{formatarMoeda(produto.preco)}</span>
                   </div>
                 </div>
               </div>
@@ -266,13 +346,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* CARD GIGANTE FINAL */}
-      <section className="card-final-destaque" style={{ backgroundImage: "url('/img/BannerGigante.webp')" }}>
-        <div className="overlay"></div>
-      </section>
-
-      {/* BOTÃO VOLTAR AO TOPO */}
+      {/* Botão voltar ao topo */}
       {mostrarSeta && (
         <button
           className="voltar-topo"
@@ -283,4 +357,4 @@ export default function Home() {
       )}
     </div>
   );
-} 
+}

@@ -98,7 +98,7 @@ const Sobre = () => {
       </section>
 
       {/* Equipe */}
-      <section className="equipe">
+      {/* <section className="equipe">
         <div className="container">
           <h2 className="section-title">Conheça Nossa Equipe</h2>
           <div className="equipe-grid">
@@ -119,10 +119,10 @@ const Sobre = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA */}
-      <section className="cta-sobre">
+      {/* <section className="cta-sobre">
         <div className="container">
           <h2>Pronto para transformar seu espaço?</h2>
           <p>Visite nossa loja ou entre em contato para um atendimento personalizado</p>
@@ -131,7 +131,7 @@ const Sobre = () => {
             <a href="/lojas" className="btn-secondary">Nossas Lojas</a>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
