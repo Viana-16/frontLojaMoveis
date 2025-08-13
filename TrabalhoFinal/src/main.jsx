@@ -16,7 +16,7 @@ import ReactDOM from 'react-dom/client';
 
 import App from './App';
 import { UserProvider } from './components/UserContext'; // Remova o UserContext, deixe só UserProvider
-import { CartProvider } from './components/CartContext';
+import { CartProvider } from './components/Carrinho/CartContext';
 import { AuthProvider } from "./contexts/AuthContext";
 import { SearchProvider } from './components/Barra-Pesquisa/SearchContext';
 

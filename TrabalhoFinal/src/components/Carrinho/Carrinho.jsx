@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useUser } from '../components/UserContext';
-import { useCart } from "../components/CartContext";
+import { useUser } from '../UserContext';
+import { useCart } from "../Carrinho/CartContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Trash2, ShoppingBag, ArrowLeft, X, Check, ChevronDown, ChevronUp } from "lucide-react";
 import "./Carrinho.css";
@@ -70,7 +70,8 @@ const Carrinho = () => {
   };
 
   const finalizarCompra = async () => {
-  const enderecoAtivoId = localStorage.getItem('enderecoAtivo');
+  const email = user?.email || JSON.parse(localStorage.getItem('cliente'))?.email;
+  const enderecoAtivoId = email ? localStorage.getItem(`enderecoAtivo_${email}`) : null;
 
   if (!enderecoAtivoId) {
     setShowAddressModal(true);
@@ -83,7 +84,7 @@ const Carrinho = () => {
     if (!res.ok) throw new Error('Endereço não encontrado');
     
     const endereco = await res.json();
-    const enderecoAtivoTexto = endereco.textoEndereco; // ✅ agora sim essa variável existe
+    const enderecoAtivoTexto = endereco.textoEndereco;
 
     const pedido = {
       email: user.email,
@@ -97,7 +98,7 @@ const Carrinho = () => {
         })),
       total: calculateSelectedTotal(),
       dataPedido: new Date().toISOString(),
-      textoEndereco: enderecoAtivoTexto, // ✅ envia junto com o pedido
+      textoEndereco: enderecoAtivoTexto,
       status: "pendente"
     };
 
@@ -117,6 +118,7 @@ const Carrinho = () => {
     alert('Erro ao buscar o endereço. Tente novamente.');
   }
 };
+
 
 
 

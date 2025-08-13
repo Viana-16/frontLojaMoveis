@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import CardAtendimento from '../components/CardAtendimento';
-import Modal from '../components/Modal';
+import CardAtendimento from '../Atendimento/CardAtendimento';
+import Modal from './Modal';
 import './Atendimento.css';
 
 const dadosAtendimento = [

@@ -9,10 +9,10 @@ const EnderecosUsuario = () => {
   const [carregando, setCarregando] = useState(true);
   const [formularioVisivel, setFormularioVisivel] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
-  // const [enderecoAtivo, setEnderecoAtivo] = useState(() => {
-  //   const salvo = localStorage.getItem('enderecoAtivo');
-  //   return salvo ? JSON.parse(salvo) : null;
-  // });
+  // // const [enderecoAtivo, setEnderecoAtivo] = useState(() => {
+  // //   const salvo = localStorage.getItem('enderecoAtivo');
+  // //   return salvo ? JSON.parse(salvo) : null;
+  // // });
   // Estado inicial: busca pelo endereço ativo do usuário logado
 const [enderecoAtivo, setEnderecoAtivo] = useState(() => {
   const email = JSON.parse(localStorage.getItem('cliente'))?.email;

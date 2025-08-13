@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../../components/UserContext';  // ajuste o caminho conforme seu projeto
-import { useCart } from '../../components/CartContext';  // ajuste o caminho conforme seu projeto
+import { useCart } from "../Carrinho/CartContext";  // ajuste o caminho conforme seu projeto
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faShoppingCart, 

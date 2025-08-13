@@ -5,7 +5,7 @@ import { Autoplay } from "swiper/modules";
 import { Link, useNavigate } from "react-router-dom";
 import "./PaginasCategoriaCSS/Lancamentos.css";
 import React, { useEffect, useState } from "react";
-import { useCart } from "../components/CartContext";
+import { useCart } from "../components/Carrinho/CartContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faShoppingCart, 
@@ -289,21 +289,6 @@ const formatarMoeda = (valor) => {
           ))}
         </div>
       </section>
-
-      {/* Cards promocionais */}
-      {/* <section className="cards-gigantes-lado-a-lado">
-        {[
-          { imagem: "/img/oferta.png"},
-         
-        ].map((card, index) => (
-          <Link
-            to={card.link}
-            key={index}
-            className="card-gigante"
-            style={{ backgroundImage: `url('${card.imagem}')` }}
-          />
-        ))}
-      </section> */}
 
       {/* Segunda metade dos produtos */}
       <section className="produtos">

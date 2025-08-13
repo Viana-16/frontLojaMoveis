@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, ChevronDown, Menu } from 'lucide-react';
 import { Truck, CreditCard, Shield, Package } from 'lucide-react';
 import { useUser } from '../UserContext';
-import { useCart } from '../CartContext';
+import { useCart } from "../Carrinho/CartContext";
 import './Navbar.css';
 
 const Navbar = () => {

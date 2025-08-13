@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../../components/UserContext";
-import { useCart } from "../../components/CartContext";
+import { useCart } from "../Carrinho/CartContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faShoppingCart, 

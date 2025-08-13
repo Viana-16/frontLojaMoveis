@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as faStarSolid, faChevronLeft, faChevronRight, faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
-import { useCart } from "../components/CartContext";
+import { useCart } from "../Carrinho/CartContext";
 import "./ProdutoDetalhes.css";
 
 export default function ProdutoDetalhes() {
@@ -16,6 +16,12 @@ export default function ProdutoDetalhes() {
   const [quantidade, setQuantidade] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loadingAvaliacoes, setLoadingAvaliacoes] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    title: "",
+    message: "",
+    type: "info" // 'info', 'success', 'error'
+  });
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +36,7 @@ export default function ProdutoDetalhes() {
         setProduto(data);
       } catch (err) {
         console.error("Erro ao carregar produto:", err);
+        showModalMessage("Erro", "Não foi possível carregar o produto", "error");
       } finally {
         setLoading(false);
       }
@@ -51,6 +58,11 @@ export default function ProdutoDetalhes() {
     fetchAvaliacoes();
   }, [id]);
 
+  const showModalMessage = (title, message, type = "info") => {
+    setModalContent({ title, message, type });
+    setShowModal(true);
+  };
+
   if (loading) return (
     <div className="loading-container">
       <div className="loading-spinner"></div>
@@ -60,17 +72,12 @@ export default function ProdutoDetalhes() {
 
   if (!produto) return <div className="error-message">Produto não encontrado</div>;
 
-  // const imagens = produto.imagensExtras || [];
   const imagens = produto.imagensExtras 
-  ? [...produto.imagensExtras].sort((a, b) => {
-      // Ordena por nome ou por ordem numérica se tiver um padrão
-      return a.localeCompare(b, undefined, { numeric: true });
-    })
-  : [];
+    ? [...produto.imagensExtras].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+    : [];
 
   const jaAvaliou = cliente ? avaliacoes.some((a) => a.usuarioEmail === cliente.email) : false;
 
-  // Função para formatar o preço como moeda brasileira
   const formatarPreco = (valor) => {
     return valor.toLocaleString('pt-BR', {
       style: 'currency',
@@ -81,7 +88,11 @@ export default function ProdutoDetalhes() {
 
   const handleAdicionarCarrinho = () => {
     if (!cliente) {
-      alert("Você precisa estar logado para adicionar ao carrinho.");
+      showModalMessage(
+        "Login Necessário", 
+        "Você precisa estar logado para adicionar ao carrinho.",
+        "error"
+      );
       navigate("/conta");
       return;
     }
@@ -92,77 +103,90 @@ export default function ProdutoDetalhes() {
     };
 
     addToCart(produtoComQuantidade);
-    alert(`"${produto.nome}" foi adicionado ao carrinho.`);
+    showModalMessage(
+      "Item Adicionado", 
+      `"${produto.nome}" foi adicionado ao carrinho.`,
+      "success"
+    );
   };
 
   const enviarAvaliacao = async () => {
-  try {
-    // Validações
-    if (!cliente) {
-      localStorage.setItem("redirectAfterLogin", location.pathname);
-      return navigate("/conta");
-    }
-
-    if (!avaliacaoSelecionada) {
-      return alert("Por favor, selecione uma nota.");
-    }
-
-    if (!comentario.trim()) {
-      return alert("Por favor, escreva um comentário.");
-    }
-
-    // Preparar dados no formato EXATO que a API espera
-    const avaliacaoData = {
-      id: "", // Deixe vazio para ser gerado pelo servidor
-      idProduto: id, // Mantém como string conforme sua API
-      clienteEmail: cliente.email,
-      nota: parseInt(avaliacaoSelecionada),
-      comentario: comentario.trim(),
-      dataCriacao: new Date().toISOString()
-    };
-
-    console.log("Dados que serão enviados:", avaliacaoData);
-
-    // Enviar requisição
-    const response = await fetch(`https://lojamoveis.onrender.com/api/Avaliacao`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token") || ""}`
-      },
-      body: JSON.stringify(avaliacaoData)
-    });
-
-    // Tratar resposta
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Detalhes do erro da API:", errorData);
-      
-      // Mostra mensagens de validação específicas se existirem
-      if (errorData.errors) {
-        const errorMessages = Object.values(errorData.errors).flat().join("\n");
-        throw new Error(errorMessages);
+    try {
+      if (!cliente) {
+        localStorage.setItem("redirectAfterLogin", location.pathname);
+        navigate("/conta");
+        return;
       }
+
+      if (!avaliacaoSelecionada) {
+        showModalMessage(
+          "Avaliação Incompleta",
+          "Por favor, selecione uma nota.",
+          "error"
+        );
+        return;
+      }
+
+      if (!comentario.trim()) {
+        showModalMessage(
+          "Avaliação Incompleta",
+          "Por favor, escreva um comentário.",
+          "error"
+        );
+        return;
+      }
+
+      const avaliacaoData = {
+        id: "",
+        idProduto: id,
+        clienteEmail: cliente.email,
+        nota: parseInt(avaliacaoSelecionada),
+        comentario: comentario.trim(),
+        dataCriacao: new Date().toISOString()
+      };
+
+      const response = await fetch(`https://lojamoveis.onrender.com/api/Avaliacao`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token") || ""}`
+        },
+        body: JSON.stringify(avaliacaoData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Detalhes do erro da API:", errorData);
+        
+        if (errorData.errors) {
+          const errorMessages = Object.values(errorData.errors).flat().join("\n");
+          throw new Error(errorMessages);
+        }
+        
+        throw new Error(errorData.title || errorData.message || "Erro na requisição");
+      }
+
+      showModalMessage(
+        "Avaliação Registrada",
+        "Sua avaliação foi registrada com sucesso!",
+        "success"
+      );
+      setComentario("");
+      setAvaliacaoSelecionada(0);
       
-      throw new Error(errorData.title || errorData.message || "Erro na requisição");
+      const novasAvaliacoes = await fetch(`https://lojamoveis.onrender.com/api/Avaliacao/produto/${id}`);
+      setAvaliacoes(await novasAvaliacoes.json());
+
+    } catch (error) {
+      console.error("Erro completo:", error);
+      showModalMessage(
+        "Erro na Avaliação",
+        `Falha ao enviar avaliação: ${error.message}`,
+        "error"
+      );
     }
+  };
 
-    // Sucesso
-    alert("Avaliação registrada com sucesso!");
-    setComentario("");
-    setAvaliacaoSelecionada(0);
-    
-    // Recarregar avaliações
-    const novasAvaliacoes = await fetch(`https://lojamoveis.onrender.com/api/Avaliacao/produto/${id}`);
-    setAvaliacoes(await novasAvaliacoes.json());
-
-  } catch (error) {
-    console.error("Erro completo:", error);
-    alert(`Falha ao enviar avaliação: ${error.message}`);
-  }
-};
-
-  // Calcula a média das avaliações
   const calcularMediaAvaliacoes = () => {
     if (avaliacoes.length === 0) return 0;
     const soma = avaliacoes.reduce((total, av) => total + av.nota, 0);
@@ -176,58 +200,53 @@ export default function ProdutoDetalhes() {
       <div className="produto-content">
         {/* Galeria de Imagens */}
         <div className="galeria-bloco">
-
-           <div className="miniaturas-container">
-      {imagens.map((img, index) => (
-        <img
-          key={index}
-          src={img}
-          alt={`Miniatura ${index + 1}`}
-          className={`miniatura ${index === imagemIndex ? "ativa" : ""}`}
-          onClick={() => setImagemIndex(index)}
-        />
-      ))}
-    </div>
-           <div className="imagem-principal-container">
-      <button 
-        className="seta seta-esquerda" 
-        onClick={() => setImagemIndex((prev) => (prev - 1 + imagens.length) % imagens.length)}
-        aria-label="Imagem anterior"
-      >
-        <FontAwesomeIcon icon={faChevronLeft} />
-      </button>
-      <img
-        src={imagens[imagemIndex] || produto.imagemUrl}
-        alt={produto.nome}
-        className="imagem-produto"
-      />
-      <button 
-        className="seta seta-direita" 
-        onClick={() => setImagemIndex((prev) => (prev + 1) % imagens.length)}
-        aria-label="Próxima imagem"
-      >
-        <FontAwesomeIcon icon={faChevronRight} />
-      </button>
-
-     
-    </div>
-    </div>
-          
-          
+          <div className="miniaturas-container">
+            {imagens.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Miniatura ${index + 1}`}
+                className={`miniatura ${index === imagemIndex ? "ativa" : ""}`}
+                onClick={() => setImagemIndex(index)}
+              />
+            ))}
+          </div>
+          <div className="imagem-principal-container">
+            <button 
+              className="seta seta-esquerda" 
+              onClick={() => setImagemIndex((prev) => (prev - 1 + imagens.length) % imagens.length)}
+              aria-label="Imagem anterior"
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+            <img
+              src={imagens[imagemIndex] || produto.imagemUrl}
+              alt={produto.nome}
+              className="imagem-produto"
+            />
+            <button 
+              className="seta seta-direita" 
+              onClick={() => setImagemIndex((prev) => (prev + 1) % imagens.length)}
+              aria-label="Próxima imagem"
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+          </div>
+        </div>
 
         {/* Informações do Produto */}
         <div className="informacoes">
           <h1 className="produto-titulo">{produto.nome}</h1>
           
           <div className="estrelas-media">
-              {[1, 2, 3, 4, 5].map((estrela) => (
-                <FontAwesomeIcon 
-                  key={estrela}
-                  icon={estrela <= Math.round(mediaAvaliacoes) ? faStarSolid : faStarRegular}
-                  className={`estrela ${estrela <= Math.round(mediaAvaliacoes) ? "ativa" : ""}`}
-                />
-              ))}
-            </div>
+            {[1, 2, 3, 4, 5].map((estrela) => (
+              <FontAwesomeIcon 
+                key={estrela}
+                icon={estrela <= Math.round(mediaAvaliacoes) ? faStarSolid : faStarRegular}
+                className={`estrela ${estrela <= Math.round(mediaAvaliacoes) ? "ativa" : ""}`}
+              />
+            ))}
+          </div>
 
           <p className="preco">{formatarPreco(produto.preco)}</p>
           
@@ -252,6 +271,7 @@ export default function ProdutoDetalhes() {
           </div>
         </div>
       </div>
+
       {/* Avaliações e Comentários */}
       <div className="avaliacoes-container">
         <h2>Avaliações do Produto</h2>
@@ -337,6 +357,35 @@ export default function ProdutoDetalhes() {
           </div>
         )}
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <div className={`modal-header ${modalContent.type}`}>
+              <h3>{modalContent.title}</h3>
+              <button 
+                className="modal-close" 
+                onClick={() => setShowModal(false)}
+                aria-label="Fechar modal"
+              >
+                &times;
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>{modalContent.message}</p>
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="modal-button" 
+                onClick={() => setShowModal(false)}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

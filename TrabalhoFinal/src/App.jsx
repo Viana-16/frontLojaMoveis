@@ -4,15 +4,14 @@ import Navbar from './components/Footer-e-NavBar/Navbar';
 import Footer from './components/Footer-e-NavBar/Footer';
 
 import Home from './components/Home';
-import Carrinho from './components/Carrinho';
-import Atendimento from './components/Atendimento';
+import Carrinho from './components/Carrinho/Carrinho';
+import Atendimento from './components/Atendimento/Atendimento';
 import Sobre from './components/Sobre';
 import Login from './components/Login-e-Cadastro/Login';
-import CadastroCliente from './components/CadastroCliente';
-// import AdminDash from './components/AdminDash';
+import CadastroCliente from './components/Login-e-Cadastro/CadastroCliente';
 
 
-import CadastroProduto from './components/CadastroProduto';
+import CadastroProduto from './components/Login-e-Cadastro/CadastroProduto';
 import Lancamentos from './components/PaginasCategoria/Lancamentos';
 import Sofas from './components/PaginasCategoria/Sofas';
 import GuardaRoupa from './components/PaginasCategoria/GuardaRoupa';
@@ -28,8 +27,8 @@ import RedefinirSenha from './components/Redefinir-Senhas/RedefinirSenha';
 import EsqueciSenha from './components/Redefinir-Senhas/EsqueciSenha';
 import MeuPerfil from './components/MeuPerfil/MeuPerfi';
 import Pagamento from './components/Pagamentos/Pagamento';
-import ProdutoDetalhes from './components/ProdutoDetalhes';
-import PedidosAdmin from './components/PedidosAdmin';
+import ProdutoDetalhes from './components/Produtos-Pedidos/ProdutoDetalhes';
+import PedidosAdmin from './components/Produtos-Pedidos/PedidosAdmin';
 import ScrollToTop from './components/ScrollToTop';
 import PortasJanelas from './components/PaginasCategoria/PortasJanelas';
 import BuscaProdutos from './components/Barra-Pesquisa/BuscaProdutos';
@@ -51,7 +50,6 @@ const App = () => {
         <Route path="/atendimento" element={<Atendimento />} />
         <Route path="/conta" element={<Login />} />
         <Route path="/cadastro" element={<CadastroCliente />} />
-        {/* <Route path="/admin" element={<AdminDash />} /> */}
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/meuperfil" element={<MeuPerfil/>} />
         <Route path="/admin-painel" element={<PedidosAdmin/>} />
