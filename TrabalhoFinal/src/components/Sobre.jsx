@@ -30,7 +30,7 @@ const Sobre = () => {
               </p>
             </div>
             <div className="historia-imagem">
-              <img src="/img/oficina-classic.jpg" alt="Oficina Móveis Clássic" />
+              <img src="/img/sobre-site.jpg" alt="Oficina Móveis Clássic" />
             </div>
           </div>
         </div>

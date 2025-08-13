@@ -38,7 +38,7 @@ const Navbar = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      navigate(`/busca?query=${encodeURIComponent(searchTerm.trim())}`);
+      navigate(`/busca?search=${encodeURIComponent(searchTerm.trim())}`);
       setShowSearchInput(false);
       setSearchTerm('');
     }

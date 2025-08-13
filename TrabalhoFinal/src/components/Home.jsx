@@ -291,11 +291,10 @@ const formatarMoeda = (valor) => {
       </section>
 
       {/* Cards promocionais */}
-      <section className="cards-gigantes-lado-a-lado">
+      {/* <section className="cards-gigantes-lado-a-lado">
         {[
-          { imagem: "/img/MoveisMcategoria.png", link: "/sobre" },
-          { imagem: "/img/MoveisMcategoria.png", link: "/produtos" },
-          { imagem: "/img/MoveisMcategoria.png", link: "/atendimento" }
+          { imagem: "/img/oferta.png"},
+         
         ].map((card, index) => (
           <Link
             to={card.link}
@@ -304,7 +303,7 @@ const formatarMoeda = (valor) => {
             style={{ backgroundImage: `url('${card.imagem}')` }}
           />
         ))}
-      </section>
+      </section> */}
 
       {/* Segunda metade dos produtos */}
       <section className="produtos">
